@@ -1,0 +1,437 @@
+openapi: 3.0.0
+info:
+  title: Don calceton API - OpenAPI 3.0
+  description: api for don calceton
+  contact:
+    email: paulagomenr@gmail.com
+  license:
+    name: MIT License
+  version: 1.0.0
+
+servers:
+  - url: http://127.0.0.1:3333
+
+tags:
+  - name: products
+    description: Operations for products
+  - name: variants
+    description: Operations for product variants
+  - name: Images
+    description: Operations for variant images
+
+paths:
+  /products:
+    get:
+      tags:
+        - products
+      summary: Returns all products
+      description: Returns all products with one variant
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductVariant'
+    post:
+      tags:
+        - products
+      summary: Add a new product to the store
+      description: Add a new product
+      requestBody:
+        description: Store a new product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductReq'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /products/{id}:
+    get:
+      tags:
+        - products
+      summary: Returns specific product
+      description: Returns one product with variants
+      parameters:
+        - name: id
+          in: path
+          description: ID of product to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVariant'
+    put:
+      tags:
+        - products
+      summary: update a product
+      description: update a product
+      parameters:
+        - name: id
+          in: path
+          description: ID of product to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: update a product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductReq'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Product'
+    delete:
+      tags:
+        - products
+      summary: Deletes a product
+      description: delete a product
+      parameters:
+        - name: id
+          in: path
+          description: 'id of the product to delete'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                example:
+                  - 'id of deleted product: id'
+  /products/{product_id}/variants:
+    get:
+      tags:
+        - variants
+      summary: Returns all variants
+      description: Returns all variants of one product
+      parameters:
+        - name: product_id
+          in: path
+          description: 'id of the product'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Variant'
+    post:
+      tags:
+        - variants
+      summary: Add a new variant
+      description: Add a new variant to the product
+      parameters:
+        - name: product_id
+          in: path
+          description: 'id of the product'
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Store a new variant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VariantReq'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variant'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Variant'
+  /products/{product_id}/variants/{id}:
+    get:
+      tags:
+        - variants
+      summary: Returns specific variant
+      description: Returns one variants with images (todo)
+      parameters:
+        - name: product_id
+          in: path
+          description: ID of product
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: id
+          in: path
+          description: ID of variant to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variant'
+    put:
+      tags:
+        - variants
+      summary: update a variant
+      description: update a variant
+      parameters:
+        - name: product_id
+          in: path
+          description: ID of product
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: id
+          in: path
+          description: ID of variant to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: update a variant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VariantReq'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variant'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Variant'
+    delete:
+      tags:
+        - variants
+      summary: Deletes a variant
+      description: delete a variant
+      parameters:
+        - name: product_id
+          in: path
+          description: 'id of the product'
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: 'id of the variant to delete'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                example:
+                  - 'id of deleted variant: id'
+  /variants/{id}/images:
+    post:
+      tags:
+        - images
+      summary: Add a new image
+      description: Add a new image to the product variant
+      parameters:
+        - name: id
+          in: path
+          description: 'id of the variant'
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Store a new image for a variant
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ImageReq'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Image'
+  /variants/{variant_id}/images/{id}:
+    put:
+      tags:
+        - images
+      summary: Edit an image
+      description: Edit an image
+      parameters:
+        - name: variant_id
+          in: path
+          description: 'id of the variant'
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: 'id of the image'
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Edit an image for a variant
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ImageReq'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Image'
+components:
+  schemas:
+    ProductVariant:
+      allOf:
+        - $ref: '#/components/schemas/Product'
+      properties:
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+    Product:
+      required:
+        - id
+        - name
+        - price
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    ProductReq:
+      required:
+        - name
+        - price
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+          format: int64
+    Variant:
+      required:
+        - id
+        - name
+        - quantity
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        product_id:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    VariantReq:
+      required:
+        - name
+        - quantity
+      type: object
+      properties:
+        name:
+          type: string
+        quantity:
+          type: integer
+          format: int64
+    Image:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        variant_id:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    ImageReq:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary

@@ -29,7 +29,9 @@ export default class ProductsController {
     const productId = payload.params.id
     const product = await Product.findOrFail(productId)
     const variants = await product.related('variants').query()
-    response.send({ product: product, variants })
+    const productJSON = product.serialize()
+
+    response.send({ ...productJSON, variants })
   }
 
   async update({ request, response }: HttpContext) {
