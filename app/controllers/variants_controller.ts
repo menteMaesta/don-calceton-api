@@ -16,7 +16,9 @@ export default class VariantsController {
       .related('variants')
       .query()
       .preload('images', (query) => query.groupLimit(1))
-    response.send(variants)
+    const variantsJson = variants.map((variant) => variant.serialize())
+
+    response.send(variantsJson)
   }
 
   async store({ request, response }: HttpContext) {
@@ -26,15 +28,20 @@ export default class VariantsController {
     } = await request.validateUsing(storeVariantValidator)
     const product = await Product.findOrFail(product_id)
     const newVariant = await product.related('variants').create(data)
-    response.send(newVariant)
+    const newVariantJson = newVariant.serialize()
+
+    response.send(newVariantJson)
   }
 
   async show({ request, response }: HttpContext) {
     const {
       params: { id },
     } = await request.validateUsing(showVariantValidator)
-    const variant = await Variant.findOrFail(id) // TODO: attach images
-    response.send(variant)
+    const variant = await Variant.findOrFail(id)
+    const images = await variant.related('images').query()
+    const variantJson = { ...variant.serialize(), images }
+
+    response.send(variantJson)
   }
 
   async update({ request, response }: HttpContext) {
@@ -50,7 +57,9 @@ export default class VariantsController {
       variant.quantity = data.quantity
     }
     variant.save()
-    response.send(variant)
+    const variantJson = variant.serialize()
+
+    response.send(variantJson)
   }
 
   async destroy({ request, response }: HttpContext) {

@@ -22,8 +22,9 @@ export default class ImagesController {
 
     const variant = await Variant.findOrFail(variant_id)
     const newImg = await variant.related('images').create({ name: imageName })
+    const imgJson = newImg.serialize()
 
-    response.send(newImg)
+    response.send(imgJson)
   }
 
   /**
@@ -48,8 +49,9 @@ export default class ImagesController {
 
     image.name = imageName
     image.save()
+    const imageJson = image.serialize()
 
-    response.send(image)
+    response.send(imageJson)
   }
 
   /**
@@ -61,6 +63,7 @@ export default class ImagesController {
     } = await request.validateUsing(destroyImageValidator)
     const image = await Image.findOrFail(id)
     image.delete()
+
     response.send(`id of deleted image: ${image.id}`)
   }
 }

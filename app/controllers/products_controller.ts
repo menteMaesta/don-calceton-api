@@ -9,7 +9,9 @@ import {
 export default class ProductsController {
   async index({ response }: HttpContext) {
     const allProducts = await Product.query().preload('variants', (query) => query.groupLimit(1))
-    response.send(allProducts)
+    const productsJson = allProducts.map((product) => product.serialize())
+
+    response.send(productsJson)
   }
 
   async store({ request, response }: HttpContext) {
@@ -18,7 +20,8 @@ export default class ProductsController {
     const newProduct = await Product.create(newProductData)
 
     if (newProduct.$isPersisted) {
-      response.send(newProduct)
+      const productJson = newProduct.serialize()
+      response.send(productJson)
     } else {
       response.abort({ message: 'can not add element' })
     }
@@ -54,7 +57,9 @@ export default class ProductsController {
     if (data.name || data.description || data.price) {
       product.save()
     }
-    response.send(product)
+    const productJson = product.serialize()
+
+    response.send(productJson)
   }
 
   async destroy({ request, response }: HttpContext) {
