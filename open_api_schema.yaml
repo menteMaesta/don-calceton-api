@@ -337,6 +337,53 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Image'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "ENOENT: no such file or directory, unlink 'uploads/ijsyiuukbmgzdbx196rfk6ed.png'"
+    delete:
+      tags:
+        - images
+      summary: Remove an image
+      description: Remove an image
+      parameters:
+        - name: variant_id
+          in: path
+          description: 'id of the variant'
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: 'id of the image'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                example:
+                  - 'id of deleted image: id'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "ENOENT: no such file or directory, unlink 'uploads/ijsyiuukbmgzdbx196rfk6ed.png'"
 components:
   schemas:
     ProductVariant:
