@@ -1,7 +1,7 @@
 import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
 import type { HttpContext } from '@adonisjs/core/http'
-import { unlink } from 'fs'
+import { unlinkSync } from 'fs'
 import { storeImageValidator, updateImageValidator, destroyImageValidator } from '#validators/image'
 import Variant from '#models/variant'
 import Image from '#models/image'
@@ -15,6 +15,7 @@ export default class ImagesController {
       params: { variant_id },
       image,
     } = await request.validateUsing(storeImageValidator)
+
     const imageName = `${cuid()}.${image.extname}`
     await image.move(app.makePath('uploads'), {
       name: imageName,
@@ -37,10 +38,11 @@ export default class ImagesController {
     } = await request.validateUsing(updateImageValidator)
     const image = await Image.findOrFail(id)
 
-    unlink(`uploads/${image.name}`, (err) => {
-      if (err) throw err
-      console.log(`uploads/${image.name} was deleted`)
-    })
+    try {
+      unlinkSync(`uploads/${image.name}`)
+    } catch (err) {
+      response.abort({ message: err.message })
+    }
 
     const imageName = `${cuid()}.${newImage.extname}`
     await newImage.move(app.makePath('uploads'), {
@@ -62,8 +64,14 @@ export default class ImagesController {
       params: { id },
     } = await request.validateUsing(destroyImageValidator)
     const image = await Image.findOrFail(id)
-    image.delete()
 
+    try {
+      unlinkSync(`uploads/${image.name}`)
+    } catch (err) {
+      response.abort({ message: err.message })
+    }
+
+    image.delete()
     response.send(`id of deleted image: ${image.id}`)
   }
 }
