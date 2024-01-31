@@ -56,8 +56,8 @@
     "@adonisjs/lucid": "^19.0.0",
     "@adonisjs/session": "^7.1.1",
     "@vinejs/vine": "^1.7.0",
-    "better-sqlite3": "^9.3.0",
     "luxon": "^3.4.4",
+    "pg": "^8.11.3",
     "reflect-metadata": "^0.2.1"
   },
   "eslintConfig": {

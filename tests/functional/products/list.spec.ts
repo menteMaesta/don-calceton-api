@@ -1,8 +1,8 @@
 import { test } from '@japa/runner'
 
 test.group('Products list', () => {
-  test('get a list of products', async ({ client, assert }) => {
-    const response = await client.get('/products')
+  test('get a list of products', async ({ client, route, assert }) => {
+    const response = await client.get(route('products.index'))
 
     response.assertAgainstApiSpec()
   })
