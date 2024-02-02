@@ -124,11 +124,9 @@ paths:
         '200':
           description: Successful operation
           content:
-            application/json:
+            text/plain:
               schema:
                 type: string
-                example:
-                  - 'id of deleted product: id'
   /products/{product_id}/variants:
     get:
       tags:
@@ -409,8 +407,8 @@ components:
         description:
           type: string
         price:
-          type: integer
-          format: int64
+          type: number
+          format: float
         createdAt:
           type: string
         updatedAt:
@@ -426,8 +424,8 @@ components:
         description:
           type: string
         price:
-          type: integer
-          format: int64
+          type: number
+          format: float
     Variant:
       required:
         - id

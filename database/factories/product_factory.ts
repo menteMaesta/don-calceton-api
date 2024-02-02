@@ -7,7 +7,7 @@ export const ProductFactory = factory
     return {
       name: faker.commerce.product(),
       description: faker.commerce.productDescription(),
-      price: faker.number.float({ max: 100, precision: 2 }),
+      price: faker.number.float({ max: 100, fractionDigits: 2 }),
     }
   })
   .relation('variants', () => VariantFactory)
