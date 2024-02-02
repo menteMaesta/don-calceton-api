@@ -409,7 +409,8 @@ components:
         description:
           type: string
         price:
-          type: string
+          type: integer
+          format: int64
         createdAt:
           type: string
         updatedAt:
