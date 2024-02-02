@@ -1,7 +1,7 @@
 import { test } from '@japa/runner'
 import { ProductFactory } from '#database/factories/product_factory'
 
-test.group('Products list', () => {
+test.group('Products', () => {
   test('get a list of products', async ({ client, route }) => {
     const product = await ProductFactory.with('variants', 1).create()
     const productsJson = product.serialize()
