@@ -1,6 +1,5 @@
 import { test } from '@japa/runner'
 import { VariantFactory } from '#database/factories/variant_factory'
-import { ImageFactory } from '#database/factories/image_factory'
 import { resolve, join } from 'path'
 
 test.group('Images', () => {

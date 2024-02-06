@@ -16,8 +16,10 @@ tags:
     description: Operations for products
   - name: variants
     description: Operations for product variants
-  - name: Images
+  - name: images
     description: Operations for variant images
+  - name: users
+    description: Operation for users
 
 paths:
   /products:
@@ -382,8 +384,116 @@ paths:
                   message:
                     type: string
                     example: "ENOENT: no such file or directory, unlink 'uploads/ijsyiuukbmgzdbx196rfk6ed.png'"
+  /users:
+    post:
+      tags:
+        - users
+      summary: Add a new user
+      description: Add a new user
+      requestBody:
+        description: Store a new user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserReq'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{id}:
+    put:
+      tags:
+        - users
+      summary: update a user
+      description: update a user
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: update a user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBase'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags:
+        - users
+      summary: Deletes a user
+      description: delete a user
+      parameters:
+        - name: product_id
+          in: path
+          description: 'id of the user'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                example:
+                  - 'id of deleted user: id'
 components:
   schemas:
+    User:
+      required:
+        - id
+        - email
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        fullName:
+          type: string
+        email:
+          type: string
+        admin:
+          type: boolean
+    UserReq:
+      required:
+        - email
+        - password
+      allOf:
+        - $ref: '#/components/schemas/UserBase'
+      type: object
+      properties:
+        email:
+          type: string
+    UserBase:
+      type: object
+      properties:
+        password:
+          type: string
+        fullName:
+          type: string
+        admin:
+          type: boolean
     ProductVariant:
       allOf:
         - $ref: '#/components/schemas/Product'
