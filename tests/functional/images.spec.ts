@@ -1,9 +1,12 @@
 import { test } from '@japa/runner'
 import { VariantFactory } from '#database/factories/variant_factory'
 import { resolve, join } from 'path'
-import { createAdminUser } from '#tests/functional/helpers'
+import { createAdminUser, removeImages } from '#tests/functional/helpers'
 
-test.group('Images', () => {
+test.group('Images', (group) => {
+  group.teardown(async () => {
+    await removeImages()
+  })
   test('store an image', async ({ client, route, assert }) => {
     const admin = await createAdminUser()
     const __dirname = resolve()

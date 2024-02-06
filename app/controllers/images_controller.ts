@@ -1,4 +1,5 @@
 import app from '@adonisjs/core/services/app'
+import env from '#start/env'
 import { cuid } from '@adonisjs/core/helpers'
 import type { HttpContext } from '@adonisjs/core/http'
 import { unlinkSync } from 'fs'
@@ -17,7 +18,7 @@ export default class ImagesController {
     } = await request.validateUsing(storeImageValidator)
 
     const imageName = `${cuid()}.${image.extname}`
-    await image.move(app.makePath('uploads'), {
+    await image.move(app.makePath(env.get('UPLOADS_PATH')), {
       name: imageName,
     })
 
@@ -39,13 +40,13 @@ export default class ImagesController {
     const image = await Image.findOrFail(id)
 
     try {
-      unlinkSync(`uploads/${image.name}`)
+      unlinkSync(`${env.get('UPLOADS_PATH')}/${image.name}`)
     } catch (err) {
       response.abort({ message: err.message })
     }
 
     const imageName = `${cuid()}.${newImage.extname}`
-    await newImage.move(app.makePath('uploads'), {
+    await newImage.move(app.makePath(env.get('UPLOADS_PATH')), {
       name: imageName,
     })
 
@@ -66,7 +67,7 @@ export default class ImagesController {
     const image = await Image.findOrFail(id)
 
     try {
-      unlinkSync(`uploads/${image.name}`)
+      unlinkSync(`${env.get('UPLOADS_PATH')}/${image.name}`)
     } catch (err) {
       response.abort({ message: err.message })
     }
