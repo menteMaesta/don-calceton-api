@@ -22,7 +22,7 @@ tags:
     description: Operation for users
 
 paths:
-  /products:
+  /api/products:
     get:
       tags:
         - products
@@ -59,7 +59,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Product'
-  /products/{id}:
+  /api/products/{id}:
     get:
       tags:
         - products
@@ -129,7 +129,7 @@ paths:
             text/plain:
               schema:
                 type: string
-  /products/{product_id}/variants:
+  /api/products/{product_id}/variants:
     get:
       tags:
         - variants
@@ -180,7 +180,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Variant'
-  /products/{product_id}/variants/{id}:
+  /api/products/{product_id}/variants/{id}:
     get:
       tags:
         - variants
@@ -271,7 +271,7 @@ paths:
               schema:
                 example:
                   - 'id of deleted variant: id'
-  /variants/{id}/images:
+  /api/variants/{id}/images:
     post:
       tags:
         - images
@@ -301,7 +301,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Image'
-  /variants/{variant_id}/images/{id}:
+  /api/variants/{variant_id}/images/{id}:
     put:
       tags:
         - images
@@ -384,7 +384,7 @@ paths:
                   message:
                     type: string
                     example: "ENOENT: no such file or directory, unlink 'uploads/ijsyiuukbmgzdbx196rfk6ed.png'"
-  /users:
+  /api/users:
     post:
       tags:
         - users
@@ -407,7 +407,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/User'
-  /users/{id}:
+  /api/users/{id}:
     put:
       tags:
         - users

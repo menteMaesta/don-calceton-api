@@ -1,9 +1,11 @@
 import { test } from '@japa/runner'
 import { VariantFactory } from '#database/factories/variant_factory'
 import { resolve, join } from 'path'
+import { createAdminUser } from '#tests/functional/helpers'
 
 test.group('Images', () => {
   test('store an image', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const __dirname = resolve()
     const filePath = join(__dirname, '/tests/pic.png')
 
@@ -13,6 +15,7 @@ test.group('Images', () => {
     const response = await client
       .post(route('variants.images.store', [variantJson.id]))
       .file('image', filePath)
+      .loginAs(admin)
     const responseBody = response.body()
 
     assert.include(responseBody.name, '.png')
@@ -21,6 +24,7 @@ test.group('Images', () => {
   })
 
   test('update an image', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const __dirname = resolve()
     const filePath = join(__dirname, '/tests/pic.png')
 
@@ -30,11 +34,13 @@ test.group('Images', () => {
     const storeImageResponse = await client
       .post(route('variants.images.store', [variantJson.id]))
       .file('image', filePath)
+      .loginAs(admin)
     const storeImageBody = storeImageResponse.body()
 
     const response = await client
       .put(route('variants.images.update', [variantJson.id, storeImageBody.id]))
       .file('image', filePath)
+      .loginAs(admin)
     const responseBody = response.body()
 
     assert.include(responseBody.name, '.png')
@@ -43,6 +49,7 @@ test.group('Images', () => {
   })
 
   test('delete an image', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const __dirname = resolve()
     const filePath = join(__dirname, '/tests/pic.png')
 
@@ -52,11 +59,12 @@ test.group('Images', () => {
     const storeImageResponse = await client
       .post(route('variants.images.store', [variantJson.id]))
       .file('image', filePath)
+      .loginAs(admin)
     const storeImageBody = storeImageResponse.body()
 
-    const response = await client.delete(
-      route('variants.images.destroy', [variantJson.id, storeImageBody.id])
-    )
+    const response = await client
+      .delete(route('variants.images.destroy', [variantJson.id, storeImageBody.id]))
+      .loginAs(admin)
 
     assert.equal(response.text(), `id of deleted image: ${storeImageBody.id}`)
   })

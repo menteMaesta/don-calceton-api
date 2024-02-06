@@ -3,13 +3,17 @@ import { VariantFactory } from '#database/factories/variant_factory'
 import { ProductFactory } from '#database/factories/product_factory'
 import type Variant from '#models/variant'
 import type Image from '#models/image'
+import { createAdminUser } from '#tests/functional/helpers'
 
 test.group('Variants', () => {
   test('get a list of variants', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const product = await ProductFactory.with('variants', 4).create()
     const productJson = product.serialize()
 
-    const response = await client.get(route('products.variants.index', [productJson.id]))
+    const response = await client
+      .get(route('products.variants.index', [productJson.id]))
+      .loginAs(admin)
     const responseBody = response.body()
 
     response.assertAgainstApiSpec()
@@ -21,6 +25,7 @@ test.group('Variants', () => {
   })
 
   test('store a variant', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const product = await ProductFactory.create()
     const productJson = product.serialize()
     const newVariant = await VariantFactory.makeStubbed()
@@ -29,6 +34,7 @@ test.group('Variants', () => {
     const response = await client
       .post(route('products.variants.store', [productJson.id]))
       .json(variantJson)
+      .loginAs(admin)
     const responseBody = response.body()
 
     assert.equal(responseBody.name, variantJson.name)
@@ -38,14 +44,15 @@ test.group('Variants', () => {
   })
 
   test('show variant', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const product = await ProductFactory.with('variants', 1, (variant) =>
       variant.with('images', 3)
     ).create()
     const productJson = product.serialize()
 
-    const response = await client.get(
-      route('products.variants.show', [productJson.id, productJson.variants[0].id])
-    )
+    const response = await client
+      .get(route('products.variants.show', [productJson.id, productJson.variants[0].id]))
+      .loginAs(admin)
     const responseBody = response.body()
 
     response.assertAgainstApiSpec()
@@ -58,6 +65,7 @@ test.group('Variants', () => {
   })
 
   test('update variant', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const product = await ProductFactory.with('variants', 1).create()
     const productJson = product.serialize()
     const newVariant = await VariantFactory.makeStubbed()
@@ -66,6 +74,7 @@ test.group('Variants', () => {
     const response = await client
       .put(route('products.variants.update', [productJson.id, productJson.variants[0].id]))
       .json(variantJson)
+      .loginAs(admin)
     const responseBody = response.body()
 
     response.assertAgainstApiSpec()
@@ -74,12 +83,13 @@ test.group('Variants', () => {
   })
 
   test('destroy variant', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const product = await ProductFactory.with('variants', 1).create()
     const productJson = product.serialize()
 
-    const response = await client.delete(
-      route('products.variants.destroy', [productJson.id, productJson.variants[0].id])
-    )
+    const response = await client
+      .delete(route('products.variants.destroy', [productJson.id, productJson.variants[0].id]))
+      .loginAs(admin)
 
     assert.equal(response.text(), `id of deleted variant: ${productJson.variants[0].id}`)
   })

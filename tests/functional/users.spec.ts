@@ -1,5 +1,6 @@
 import { test } from '@japa/runner'
 import { UserFactory } from '#database/factories/user_factory'
+import { createAdminUser } from '#tests/functional/helpers'
 
 test.group('Users', () => {
   test('store a user', async ({ client, route, assert }) => {
@@ -16,12 +17,16 @@ test.group('Users', () => {
   })
 
   test('update a user', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const user = await UserFactory.create()
 
     const newUser = await UserFactory.makeStubbed()
     const newUserJson = newUser.serialize()
 
-    const response = await client.put(route('users.update', [user.id])).json(newUserJson)
+    const response = await client
+      .put(route('users.update', [user.id]))
+      .json(newUserJson)
+      .loginAs(admin)
     const responseBody = response.body()
 
     response.assertAgainstApiSpec()
@@ -31,10 +36,11 @@ test.group('Users', () => {
   })
 
   test('destroy user', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const user = await UserFactory.create()
     const userJson = user.serialize()
 
-    const response = await client.delete(route('users.destroy', [userJson.id]))
+    const response = await client.delete(route('users.destroy', [userJson.id])).loginAs(admin)
 
     assert.equal(response.text(), `id of deleted user: ${userJson.id}`)
   })
