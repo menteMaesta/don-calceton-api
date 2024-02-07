@@ -16,17 +16,22 @@ const SessionController = () => import('#controllers/session_controller')
 
 router
   .group(() => {
-    router
-      .resource('products', ProductsController)
-      .only(['index', 'store', 'show', 'update', 'destroy'])
+    router.resource('products', ProductsController).only(['index', 'show'])
+    router.resource('products.variants', VariantsController).only(['index', 'show'])
 
     router
-      .resource('products.variants', VariantsController)
-      .only(['index', 'store', 'show', 'update', 'destroy'])
+      .group(() => {
+        router.resource('products', ProductsController).only(['store', 'update', 'destroy'])
 
-    router.resource('variants.images', ImagesController).only(['store', 'update', 'destroy'])
+        router
+          .resource('products.variants', VariantsController)
+          .only(['store', 'update', 'destroy'])
 
-    router.resource('users', UsersController).only(['update', 'destroy'])
+        router.resource('variants.images', ImagesController).only(['store', 'update', 'destroy'])
+
+        router.resource('users', UsersController).only(['update', 'destroy'])
+      })
+      .use(middleware.admin())
   })
   .prefix('/api')
   .use(middleware.auth())
