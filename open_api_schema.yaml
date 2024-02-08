@@ -20,6 +20,8 @@ tags:
     description: Operations for variant images
   - name: users
     description: Operation for users
+  - name: login
+    description: Operations for tokens
 
 paths:
   /api/products:
@@ -28,6 +30,13 @@ paths:
         - products
       summary: Returns all products
       description: Returns all products with one variant
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Successful operation
@@ -42,6 +51,13 @@ paths:
         - products
       summary: Add a new product to the store
       description: Add a new product
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       requestBody:
         description: Store a new product
         content:
@@ -73,6 +89,12 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Successful operation
@@ -93,6 +115,12 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       requestBody:
         description: update a product
         content:
@@ -122,6 +150,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Successful operation
@@ -142,6 +176,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Successful operation
@@ -163,6 +203,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       requestBody:
         description: Store a new variant
         content:
@@ -201,6 +247,12 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Successful operation
@@ -228,6 +280,12 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       requestBody:
         description: update a variant
         content:
@@ -263,6 +321,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Successful operation
@@ -284,6 +348,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       requestBody:
         description: Store a new image for a variant
         content:
@@ -320,6 +390,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       requestBody:
         description: Edit an image for a variant
         content:
@@ -365,6 +441,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Successful operation
@@ -421,6 +503,12 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       requestBody:
         description: update a user
         content:
@@ -444,12 +532,18 @@ paths:
       summary: Deletes a user
       description: delete a user
       parameters:
-        - name: product_id
+        - name: id
           in: path
           description: 'id of the user'
           required: true
           schema:
             type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Successful operation
@@ -458,6 +552,65 @@ paths:
               schema:
                 example:
                   - 'id of deleted user: id'
+  /api/login:
+    post:
+      tags:
+        - tokens
+      summary: Get token
+      description: Givin user data get access token
+      requestBody:
+        description: user credentials
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  'type':
+                    type: string
+                  value:
+                    type: string
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  'type':
+                    type: string
+                  value:
+                    type: string
+  /api/logout:
+    delete:
+      tags:
+        - users
+      summary: Deletes a user
+      description: delete a user
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                example:
+                  - 'Logout success'
 components:
   schemas:
     User:

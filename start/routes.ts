@@ -12,12 +12,13 @@ const ProductsController = () => import('#controllers/products_controller')
 const VariantsController = () => import('#controllers/variants_controller')
 const ImagesController = () => import('#controllers/images_controller')
 const UsersController = () => import('#controllers/users_controller')
-const SessionController = () => import('#controllers/session_controller')
+import TokenController from '#controllers/token_controller'
 
 router
   .group(() => {
     router.resource('products', ProductsController).only(['index', 'show'])
     router.resource('products.variants', VariantsController).only(['index', 'show'])
+    router.delete('/logout', [TokenController, 'logout'])
 
     router
       .group(() => {
@@ -34,12 +35,11 @@ router
       .use(middleware.admin())
   })
   .prefix('/api')
-  .use(middleware.auth())
+  .use(middleware.auth({ guards: ['api'] }))
 
 router
   .group(() => {
     router.resource('/users', UsersController).only(['store'])
-    router.post('/login', [SessionController, 'store'])
-    router.post('/logout', [SessionController, 'logout'])
+    router.post('/login', [TokenController, 'login'])
   })
   .prefix('/api')
