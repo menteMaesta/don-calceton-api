@@ -580,7 +580,9 @@ paths:
                 properties:
                   'type':
                     type: string
-                  value:
+                  token:
+                    type: string
+                  expiresAt:
                     type: string
             application/xml:
               schema:
@@ -588,7 +590,9 @@ paths:
                 properties:
                   'type':
                     type: string
-                  value:
+                  token:
+                    type: string
+                  expiresAt:
                     type: string
   /api/logout:
     delete:
