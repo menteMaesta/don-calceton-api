@@ -658,7 +658,13 @@ components:
         variants:
           type: array
           items:
-            $ref: '#/components/schemas/Variant'
+            allOf:
+              - $ref: '#/components/schemas/Variant'
+            properties:
+              images:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Image'
     Product:
       required:
         - id

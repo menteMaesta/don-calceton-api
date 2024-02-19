@@ -8,7 +8,10 @@ import {
 
 export default class ProductsController {
   async index({ response }: HttpContext) {
-    const allProducts = await Product.query().preload('variants', (query) => query.groupLimit(1))
+    const allProducts = await Product.query().preload('variants', (query) => {
+      query.groupLimit(1)
+      return query.preload('images', (query) => query.groupLimit(1))
+    })
     const productsJson = allProducts.map((product) => product.serialize())
 
     response.send(productsJson)
@@ -31,7 +34,10 @@ export default class ProductsController {
     const payload = await request.validateUsing(showProductValidator)
     const productId = payload.params.id
     const product = await Product.findOrFail(productId)
-    const variants = await product.related('variants').query()
+    const variants = await product
+      .related('variants')
+      .query()
+      .preload('images', (query) => query.groupLimit(1))
     const productJSON = product.serialize()
 
     response.send({ ...productJSON, variants })
