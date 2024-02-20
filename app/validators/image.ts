@@ -11,6 +11,19 @@ export const storeImageValidator = vine.compile(
   })
 )
 
+export const bulkStoreImageValidator = vine.compile(
+  vine.object({
+    params: vine.object({
+      variant_id: vine.string().trim(),
+    }),
+    images: vine.array(
+      vine.file({
+        extnames: ['jpg', 'png', 'jpeg'],
+      })
+    ),
+  })
+)
+
 export const updateImageValidator = vine.compile(
   vine.object({
     params: vine.object({

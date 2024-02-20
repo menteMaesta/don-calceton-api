@@ -3,7 +3,12 @@ import env from '#start/env'
 import { cuid } from '@adonisjs/core/helpers'
 import type { HttpContext } from '@adonisjs/core/http'
 import { unlinkSync } from 'fs'
-import { storeImageValidator, updateImageValidator, destroyImageValidator } from '#validators/image'
+import {
+  storeImageValidator,
+  updateImageValidator,
+  destroyImageValidator,
+  bulkStoreImageValidator,
+} from '#validators/image'
 import Variant from '#models/variant'
 import Image from '#models/image'
 
@@ -27,6 +32,28 @@ export default class ImagesController {
     const imgJson = newImg.serialize()
 
     response.send(imgJson)
+  }
+
+  /**
+   * Handle bulk image submissions
+   */
+  async bulkStore({ request, response }: HttpContext) {
+    const {
+      params: { variant_id },
+      images,
+    } = await request.validateUsing(bulkStoreImageValidator)
+
+    const variant = await Variant.findOrFail(variant_id)
+
+    for (let image of images) {
+      const imageName = `${cuid()}.${image.extname}`
+      await image.move(app.makePath(env.get('UPLOADS_PATH')), {
+        name: imageName,
+      })
+      await variant.related('images').create({ name: imageName })
+    }
+
+    response.send({ message: `uploaded images to ${variant_id}` })
   }
 
   /**

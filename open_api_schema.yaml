@@ -371,6 +371,44 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Image'
+  /api/variants/{id}/bulk/images:
+    post:
+      tags:
+        - images
+      summary: Add multiple new images to the same variant
+      description: Add many images to one product variant
+      parameters:
+        - name: id
+          in: path
+          description: 'id of the variant'
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Store many images for a variant
+        content:
+          multipart/form-data:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ImageReq'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Image'
   /api/variants/{variant_id}/images/{id}:
     put:
       tags:

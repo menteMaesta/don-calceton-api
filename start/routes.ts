@@ -29,6 +29,7 @@ router
           .only(['store', 'update', 'destroy'])
 
         router.resource('variants.images', ImagesController).only(['store', 'update', 'destroy'])
+        router.post('variants/:variant_id/bulk/images', [ImagesController, 'bulkStore'])
 
         router.resource('users', UsersController).only(['update', 'destroy'])
       })
