@@ -1,7 +1,9 @@
 import User from '#models/user'
+import mail from '@adonisjs/mail/services/main'
 import type { HttpContext } from '@adonisjs/core/http'
 import encryption from '@adonisjs/core/services/encryption'
 import { randomBytes } from 'crypto'
+import env from '#start/env'
 import {
   loginValidator,
   generateForgotPasswordValidator,
@@ -32,7 +34,16 @@ export default class TokenController {
     user.forgot_pass_token = randomValue
     user.save()
     const encrypted = encryption.encrypt(randomValue, '2 hours')
-    //TODO: Send encrypted to email
+
+    await mail.send((message) => {
+      message
+        .to(user.email)
+        .from('don.calceton@mail.com')
+        .subject('Restablece tu contraseña don calcetón')
+        .text(
+          `Da click a este link para restablecer tu contraseña: ${env.get('FRONTEND_BASE_URL')}/${encrypted}/change_password`
+        )
+    })
     response.send(encrypted)
   }
 
