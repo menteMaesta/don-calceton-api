@@ -7,7 +7,7 @@ import env from '#start/env'
 import {
   loginValidator,
   generateForgotPasswordValidator,
-  validateForgotPasswordValidator,
+  updatePasswordValidator,
 } from '#validators/token'
 
 export default class TokenController {
@@ -44,11 +44,11 @@ export default class TokenController {
           `Da click a este link para restablecer tu contraseña: ${env.get('FRONTEND_BASE_URL')}/${encrypted}/change_password`
         )
     })
-    response.send(encrypted)
+    response.send({ message: 'Success' })
   }
 
-  async validateForgotPasswordLink({ request, response }: HttpContext) {
-    const { forgot_token } = await request.validateUsing(validateForgotPasswordValidator)
+  async updatePassword({ request, response }: HttpContext) {
+    const { new_password, forgot_token } = await request.validateUsing(updatePasswordValidator)
     const decriptedValue = encryption.decrypt(forgot_token)
     const user = await User.findByOrFail('forgot_pass_token', decriptedValue)
 
@@ -56,9 +56,11 @@ export default class TokenController {
 
     if (isValid) {
       user.forgot_pass_token = ''
+      user.password = new_password
       user.save()
     }
+    const updatedUser = user.serialize()
 
-    response.send(isValid)
+    response.send(updatedUser)
   }
 }

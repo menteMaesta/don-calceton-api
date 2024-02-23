@@ -13,8 +13,9 @@ export const generateForgotPasswordValidator = vine.compile(
   })
 )
 
-export const validateForgotPasswordValidator = vine.compile(
+export const updatePasswordValidator = vine.compile(
   vine.object({
+    new_password: vine.string(),
     forgot_token: vine.string(),
   })
 )

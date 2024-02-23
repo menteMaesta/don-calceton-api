@@ -657,10 +657,10 @@ paths:
     post:
       tags:
         - tokens
-      summary: Return token to update user's password
-      description: Return token to update user's password
+      summary: Send email to update password
+      description: Send email with update password instructions
       requestBody:
-        description: token to update password
+        description: send email to update password
         content:
           application/json:
             schema:
@@ -676,13 +676,13 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: token
-  /api/validate_forgot_password:
+                example: Success
+  /api/update_password:
     post:
       tags:
         - tokens
-      summary: Return if token to update user's password is valid
-      description: Return if token to update user's password is valid
+      summary: Changes user's password
+      description: Changes user's password if the token sent is valid
       requestBody:
         description: validates token to update password
         content:
@@ -692,15 +692,19 @@ paths:
               properties:
                 forgot_token:
                   type: string
+                new_password:
+                  type: string
         required: true
       responses:
         '200':
           description: Successful operation
           content:
-            text/plain:
+            application/json:
               schema:
-                type: boolean
-                example: false
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
 components:
   schemas:
     User:
