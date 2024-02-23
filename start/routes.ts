@@ -42,5 +42,7 @@ router
   .group(() => {
     router.resource('/users', UsersController).only(['store'])
     router.post('/login', [TokenController, 'login'])
+    router.post('/forgot_password', [TokenController, 'generateForgotPasswordLink'])
+    router.post('/validate_forgot_password', [TokenController, 'validateForgotPasswordLink'])
   })
   .prefix('/api')

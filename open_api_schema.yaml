@@ -653,6 +653,54 @@ paths:
               schema:
                 example:
                   - 'Logout success'
+  /api/forgot_password:
+    post:
+      tags:
+        - tokens
+      summary: Return token to update user's password
+      description: Return token to update user's password
+      requestBody:
+        description: token to update password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: token
+  /api/validate_forgot_password:
+    post:
+      tags:
+        - tokens
+      summary: Return if token to update user's password is valid
+      description: Return if token to update user's password is valid
+      requestBody:
+        description: validates token to update password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                forgot_token:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: boolean
+                example: false
 components:
   schemas:
     User:
