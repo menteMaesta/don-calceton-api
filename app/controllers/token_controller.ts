@@ -52,7 +52,8 @@ export default class TokenController {
     const decriptedValue = encryption.decrypt(forgot_token)
     const user = await User.findByOrFail('forgot_pass_token', decriptedValue)
 
-    const isValid = decriptedValue === user.forgot_pass_token
+    const isValid =
+      user.forgot_pass_token && decriptedValue ? decriptedValue === user.forgot_pass_token : false
 
     if (isValid) {
       user.forgot_pass_token = ''

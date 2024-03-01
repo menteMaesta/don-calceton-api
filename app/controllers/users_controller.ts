@@ -47,4 +47,9 @@ export default class UsersController {
     await user.delete()
     response.send(`id of deleted user: ${user.id}`)
   }
+
+  async validate({ auth, response }: HttpContext) {
+    const user = auth.user
+    response.send(user)
+  }
 }

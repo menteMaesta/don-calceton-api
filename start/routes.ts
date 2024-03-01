@@ -32,6 +32,7 @@ router
         router.post('variants/:variant_id/bulk/images', [ImagesController, 'bulkStore'])
 
         router.resource('users', UsersController).only(['update', 'destroy'])
+        router.get('/validate_credentials', [UsersController, 'validate'])
       })
       .use(middleware.admin())
   })

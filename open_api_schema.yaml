@@ -590,6 +590,29 @@ paths:
               schema:
                 example:
                   - 'id of deleted user: id'
+  /api/validate_credentials:
+    get:
+      tags:
+        - users
+      summary: Add a new user
+      description: Add a new user
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
   /api/login:
     post:
       tags:
