@@ -73,6 +73,6 @@ export default class ProductsController {
     const productId = payload.params.id
     const product = await Product.findOrFail(productId)
     await product.delete()
-    response.send(`id of deleted product: ${product.id}`)
+    response.send({ message: `id of deleted product: ${product.id}` })
   }
 }

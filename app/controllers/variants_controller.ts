@@ -12,10 +12,7 @@ export default class VariantsController {
   async index({ request, response }: HttpContext) {
     const payload = await request.validateUsing(listVariantsValidator)
     const product = await Product.findOrFail(payload.params.product_id)
-    const variants = await product
-      .related('variants')
-      .query()
-      .preload('images', (query) => query.groupLimit(1))
+    const variants = await product.related('variants').query().preload('images')
     const variantsJson = variants.map((variant) => variant.serialize())
 
     response.send(variantsJson)
@@ -68,6 +65,6 @@ export default class VariantsController {
     } = await request.validateUsing(showVariantValidator)
     const variant = await Variant.findOrFail(id)
     variant.delete()
-    response.send(`id of deleted variant: ${variant.id}`)
+    response.send({ message: `id of deleted variant: ${variant.id}` })
   }
 }

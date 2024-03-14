@@ -100,6 +100,6 @@ export default class ImagesController {
     }
 
     image.delete()
-    response.send(`id of deleted image: ${image.id}`)
+    response.send({ message: `id of deleted image: ${image.id}` })
   }
 }
