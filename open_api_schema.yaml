@@ -719,9 +719,9 @@ paths:
             schema:
               type: object
               properties:
-                forgot_token:
+                forgotToken:
                   type: string
-                new_password:
+                newPassword:
                   type: string
         required: true
       responses:

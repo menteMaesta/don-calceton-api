@@ -2,7 +2,7 @@ import User from '#models/user'
 import mail from '@adonisjs/mail/services/main'
 import type { HttpContext } from '@adonisjs/core/http'
 import encryption from '@adonisjs/core/services/encryption'
-import { randomBytes } from 'crypto'
+import { randomBytes } from 'node:crypto'
 import env from '#start/env'
 import {
   loginValidator,
@@ -48,8 +48,8 @@ export default class TokenController {
   }
 
   async updatePassword({ request, response }: HttpContext) {
-    const { new_password, forgot_token } = await request.validateUsing(updatePasswordValidator)
-    const decriptedValue = encryption.decrypt(forgot_token)
+    const { newPassword, forgotToken } = await request.validateUsing(updatePasswordValidator)
+    const decriptedValue = encryption.decrypt(forgotToken)
     const user = await User.findByOrFail('forgot_pass_token', decriptedValue)
 
     const isValid =
@@ -57,7 +57,7 @@ export default class TokenController {
 
     if (isValid) {
       user.forgot_pass_token = ''
-      user.password = new_password
+      user.password = newPassword
       user.save()
     }
     const updatedUser = user.serialize()
