@@ -12,7 +12,7 @@ const ProductsController = () => import('#controllers/products_controller')
 const VariantsController = () => import('#controllers/variants_controller')
 const ImagesController = () => import('#controllers/images_controller')
 const UsersController = () => import('#controllers/users_controller')
-import TokenController from '#controllers/token_controller'
+const TokenController = () => import('#controllers/token_controller')
 
 router
   .group(() => {
