@@ -66,6 +66,6 @@ test.group('Products', () => {
     const response = await client
       .delete(route('products.destroy', [productsJson.id]))
       .loginAs(admin)
-    assert.equal(response.text(), `id of deleted product: ${productsJson.id}`)
+    assert.equal(response.body().message, `id of deleted product: ${productsJson.id}`)
   })
 })

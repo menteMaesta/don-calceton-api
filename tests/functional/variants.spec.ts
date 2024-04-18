@@ -91,6 +91,6 @@ test.group('Variants', () => {
       .delete(route('products.variants.destroy', [productJson.id, productJson.variants[0].id]))
       .loginAs(admin)
 
-    assert.equal(response.text(), `id of deleted variant: ${productJson.variants[0].id}`)
+    assert.equal(response.body().message, `id of deleted variant: ${productJson.variants[0].id}`)
   })
 })

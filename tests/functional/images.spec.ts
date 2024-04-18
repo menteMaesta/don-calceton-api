@@ -1,6 +1,6 @@
 import { test } from '@japa/runner'
 import { VariantFactory } from '#database/factories/variant_factory'
-import { resolve, join } from 'path'
+import { resolve, join } from 'node:path'
 import { createAdminUser, removeImages } from '#tests/functional/helpers'
 
 test.group('Images', (group) => {
@@ -9,8 +9,8 @@ test.group('Images', (group) => {
   })
   test('store an image', async ({ client, route, assert }) => {
     const admin = await createAdminUser()
-    const __dirname = resolve()
-    const filePath = join(__dirname, '/tests/pic.png')
+    const dirname = resolve()
+    const filePath = join(dirname, '/tests/pic.png')
 
     const variant = await VariantFactory.create()
     const variantJson = variant.serialize()
@@ -28,8 +28,8 @@ test.group('Images', (group) => {
 
   test('update an image', async ({ client, route, assert }) => {
     const admin = await createAdminUser()
-    const __dirname = resolve()
-    const filePath = join(__dirname, '/tests/pic.png')
+    const dirname = resolve()
+    const filePath = join(dirname, '/tests/pic.png')
 
     const variant = await VariantFactory.with('images', 1).create()
     const variantJson = variant.serialize()
@@ -53,8 +53,8 @@ test.group('Images', (group) => {
 
   test('delete an image', async ({ client, route, assert }) => {
     const admin = await createAdminUser()
-    const __dirname = resolve()
-    const filePath = join(__dirname, '/tests/pic.png')
+    const dirname = resolve()
+    const filePath = join(dirname, '/tests/pic.png')
 
     const variant = await VariantFactory.with('images', 1).create()
     const variantJson = variant.serialize()
@@ -69,6 +69,6 @@ test.group('Images', (group) => {
       .delete(route('variants.images.destroy', [variantJson.id, storeImageBody.id]))
       .loginAs(admin)
 
-    assert.equal(response.text(), `id of deleted image: ${storeImageBody.id}`)
+    assert.equal(response.body().message, `id of deleted image: ${storeImageBody.id}`)
   })
 })
