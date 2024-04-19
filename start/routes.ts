@@ -41,7 +41,7 @@ router
 
 router
   .group(() => {
-    router.resource('/users', UsersController).only(['store'])
+    // router.resource('/users', UsersController).only(['store'])
     router.post('/login', [TokenController, 'login'])
     router.post('/forgot_password', [TokenController, 'generateForgotPasswordLink'])
     router.post('/update_password', [TokenController, 'updatePassword'])

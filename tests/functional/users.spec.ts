@@ -14,7 +14,7 @@ test.group('Users', () => {
     assert.equal(responseBody.fullName, userJson.fullName)
     assert.equal(responseBody.email, userJson.email.toLowerCase())
     assert.equal(responseBody.admin, userJson.admin)
-  })
+  }).skip(true, 'Skiped because this endpoint was intentionally disabled')
 
   test('update a user', async ({ client, route, assert }) => {
     const admin = await createAdminUser()

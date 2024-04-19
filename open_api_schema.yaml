@@ -510,29 +510,29 @@ paths:
                   message:
                     type: string
                     example: "ENOENT: no such file or directory, unlink 'uploads/ijsyiuukbmgzdbx196rfk6ed.png'"
-  /api/users:
-    post:
-      tags:
-        - users
-      summary: Add a new user
-      description: Add a new user
-      requestBody:
-        description: Store a new user
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserReq'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
+  # /api/users:
+  # post:
+  #   tags:
+  #     - users
+  #   summary: Add a new user
+  #   description: Add a new user
+  #   requestBody:
+  #     description: Store a new user
+  #     content:
+  #       application/json:
+  #         schema:
+  #           $ref: '#/components/schemas/UserReq'
+  #     required: true
+  #   responses:
+  #     '200':
+  #       description: Successful operation
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/User'
+  #         application/xml:
+  #           schema:
+  #             $ref: '#/components/schemas/User'
   /api/users/{id}:
     put:
       tags:
