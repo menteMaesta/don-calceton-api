@@ -20,6 +20,7 @@ test.group('Products', () => {
       name: 'product 1',
       description: 'description for product 1',
       price: 10,
+      wholesalePrice: 5,
     }
 
     const response = await client.post(route('products.store')).json(newProductData).loginAs(admin)
@@ -47,6 +48,7 @@ test.group('Products', () => {
       name: 'New product name',
       description: 'new description',
       price: 50,
+      wholesalePrice: 25,
     }
 
     const response = await client

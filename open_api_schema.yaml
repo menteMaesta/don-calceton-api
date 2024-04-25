@@ -801,6 +801,9 @@ components:
         price:
           type: number
           format: float
+        wholesalePrice:
+          type: number
+          format: float
         createdAt:
           type: string
         updatedAt:
@@ -816,6 +819,9 @@ components:
         description:
           type: string
         price:
+          type: number
+          format: float
+        wholesalePrice:
           type: number
           format: float
     Variant:

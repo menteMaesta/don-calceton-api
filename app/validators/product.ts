@@ -5,6 +5,7 @@ export const storeProductValidator = vine.compile(
     name: vine.string().trim(),
     description: vine.string().trim().escape().optional(),
     price: vine.number({ strict: true }),
+    wholesalePrice: vine.number({ strict: true }).optional(),
   })
 )
 
@@ -24,5 +25,6 @@ export const updateProductValidator = vine.compile(
     name: vine.string().trim().optional(),
     description: vine.string().trim().escape().optional(),
     price: vine.number({ strict: true }).optional(),
+    wholesalePrice: vine.number({ strict: true }).optional(),
   })
 )

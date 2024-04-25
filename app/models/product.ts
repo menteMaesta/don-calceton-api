@@ -13,6 +13,8 @@ export default class Product extends BaseModel {
   declare description: string | null
   @column({ serialize: (value: number) => Number(value) })
   declare price: number
+  @column({ serialize: (value: number) => Number(value) })
+  declare wholesalePrice: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

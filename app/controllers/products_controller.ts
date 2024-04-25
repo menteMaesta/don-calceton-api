@@ -10,7 +10,7 @@ export default class ProductsController {
   async index({ response }: HttpContext) {
     const allProducts = await Product.query().preload('variants', (query) => {
       query.groupLimit(1)
-      return query.preload('images', (query) => query.groupLimit(1))
+      return query.preload('images', (subQuery) => subQuery.groupLimit(1))
     })
     const productsJson = allProducts.map((product) => product.serialize())
 
@@ -59,8 +59,11 @@ export default class ProductsController {
     if (data.price) {
       product.price = data.price
     }
+    if (data.wholesalePrice) {
+      product.wholesalePrice = data.wholesalePrice
+    }
 
-    if (data.name || data.description || data.price) {
+    if (data.name || data.description || data.price || data.wholesalePrice) {
       product.save()
     }
     const productJson = product.serialize()
