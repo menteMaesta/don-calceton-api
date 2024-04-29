@@ -30,13 +30,6 @@ paths:
         - products
       summary: Returns all products
       description: Returns all products with one variant
-      parameters:
-        - name: Authorization
-          in: header
-          description: 'bearer token'
-          schema:
-            type: string
-          required: true
       responses:
         '200':
           description: Successful operation
@@ -89,12 +82,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: Authorization
-          in: header
-          description: 'bearer token'
-          schema:
-            type: string
-          required: true
       responses:
         '200':
           description: Successful operation
@@ -179,12 +166,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: Authorization
-          in: header
-          description: 'bearer token'
-          schema:
-            type: string
-          required: true
       responses:
         '200':
           description: Successful operation
@@ -250,12 +231,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: Authorization
-          in: header
-          description: 'bearer token'
-          schema:
-            type: string
-          required: true
       responses:
         '200':
           description: Successful operation

@@ -16,8 +16,6 @@ const TokenController = () => import('#controllers/token_controller')
 
 router
   .group(() => {
-    router.resource('products', ProductsController).only(['index', 'show'])
-    router.resource('products.variants', VariantsController).only(['index', 'show'])
     router.delete('/logout', [TokenController, 'logout'])
 
     router
@@ -45,5 +43,7 @@ router
     router.post('/login', [TokenController, 'login'])
     router.post('/forgot_password', [TokenController, 'generateForgotPasswordLink'])
     router.post('/update_password', [TokenController, 'updatePassword'])
+    router.resource('products', ProductsController).only(['index', 'show'])
+    router.resource('products.variants', VariantsController).only(['index', 'show'])
   })
   .prefix('/api')
