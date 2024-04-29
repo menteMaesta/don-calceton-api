@@ -45,7 +45,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProductVariant'
+                  $ref: '#/components/schemas/ProductListItem'
     post:
       tags:
         - products
@@ -784,6 +784,20 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/Image'
+    ProductListItem:
+      allOf:
+        - $ref: '#/components/schemas/Product'
+      properties:
+        variants:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+              name:
+                type: string
     Product:
       required:
         - id

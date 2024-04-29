@@ -1,5 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Product from '#models/product'
+import Variant from '#models/variant'
 import {
   storeProductValidator,
   showProductValidator,
@@ -9,10 +10,29 @@ import {
 export default class ProductsController {
   async index({ response }: HttpContext) {
     const allProducts = await Product.query().preload('variants', (query) => {
-      query.groupLimit(1)
       return query.preload('images', (subQuery) => subQuery.groupLimit(1))
     })
-    const productsJson = allProducts.map((product) => product.serialize())
+    const productsJson = allProducts.map((product) => {
+      const formatProduct = product.serialize({
+        relations: {
+          variants: {
+            fields: { pick: ['images'] },
+            relations: {
+              images: {
+                fields: { pick: ['id', 'name'] },
+              },
+            },
+          },
+        },
+      })
+      formatProduct.variants = formatProduct.variants
+        .filter((variant: Variant) => variant.images.length > 0)
+        .map((variant: Variant) => ({
+          id: variant.images[0].id,
+          name: variant.images[0].name,
+        }))
+      return formatProduct
+    })
 
     response.send(productsJson)
   }

@@ -1,12 +1,19 @@
 import { test } from '@japa/runner'
+import Variant from '#models/variant'
 import { ProductFactory } from '#database/factories/product_factory'
 import { createAdminUser } from '#tests/functional/helpers'
 
 test.group('Products', () => {
   test('get a list of products', async ({ client, route }) => {
     const admin = await createAdminUser()
-    const product = await ProductFactory.with('variants', 1).create()
+    const product = await ProductFactory.with('variants', 1, (variant) =>
+      variant.with('images', 1)
+    ).create()
     const productsJson = product.serialize()
+    productsJson.variants = productsJson.variants.map((variant: Variant) => ({
+      id: variant.images[0].id,
+      name: variant.images[0].name,
+    }))
 
     const response = await client.get(route('products.index')).loginAs(admin)
 

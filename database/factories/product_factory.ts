@@ -8,6 +8,7 @@ export const ProductFactory = factory
       name: faker.commerce.product(),
       description: faker.commerce.productDescription(),
       price: faker.number.float({ max: 100, fractionDigits: 2 }),
+      wholesalePrice: faker.number.float({ max: 50, fractionDigits: 2 }),
     }
   })
   .relation('variants', () => VariantFactory)
