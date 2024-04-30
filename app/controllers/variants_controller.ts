@@ -20,10 +20,10 @@ export default class VariantsController {
 
   async store({ request, response }: HttpContext) {
     const {
-      params: { product_id },
+      params: { product_id: productId },
       ...data
     } = await request.validateUsing(storeVariantValidator)
-    const product = await Product.findOrFail(product_id)
+    const product = await Product.findOrFail(productId)
     const newVariant = await product.related('variants').create(data)
     const newVariantJson = newVariant.serialize()
 
@@ -39,6 +39,35 @@ export default class VariantsController {
     const variantJson = { ...variant.serialize(), images }
 
     response.send(variantJson)
+  }
+
+  async showAll({ response }: HttpContext) {
+    const allProducts = await Product.query()
+    const productsJson = allProducts.map((product) =>
+      product.serialize({ fields: ['id', 'name', 'price', 'wholesalePrice'] })
+    )
+    const allVariants = await Variant.query().preload('images', (query) => query.groupLimit(1))
+    const variantsJson = allVariants.map((variant) => {
+      const currentProduct = productsJson.find((product) => product.id === variant.productId)
+      let variantJson = variant.serialize({
+        fields: {
+          omit: ['createdAt', 'updatedAt'],
+        },
+        relations: {
+          images: {
+            fields: {
+              pick: ['id', 'name'],
+            },
+          },
+        },
+      })
+      variantJson.images = variantJson.images[0]
+      variantJson.productName = currentProduct?.name
+      variantJson.productPrice = currentProduct?.price
+      variantJson.productWholesalePrice = currentProduct?.wholesalePrice
+      return variantJson
+    })
+    response.send(variantsJson)
   }
 
   async update({ request, response }: HttpContext) {

@@ -45,5 +45,6 @@ router
     router.post('/update_password', [TokenController, 'updatePassword'])
     router.resource('products', ProductsController).only(['index', 'show'])
     router.resource('products.variants', VariantsController).only(['index', 'show'])
+    router.get('/all_variants', [VariantsController, 'showAll'])
   })
   .prefix('/api')

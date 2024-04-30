@@ -1,11 +1,14 @@
 import { test } from '@japa/runner'
 import { VariantFactory } from '#database/factories/variant_factory'
 import { ProductFactory } from '#database/factories/product_factory'
+import testUtils from '@adonisjs/core/services/test_utils'
 import type Variant from '#models/variant'
 import type Image from '#models/image'
 import { createAdminUser } from '#tests/functional/helpers'
 
-test.group('Variants', () => {
+test.group('Variants', (group) => {
+  group.each.setup(() => testUtils.db().truncate())
+
   test('get a list of variants', async ({ client, route, assert }) => {
     const admin = await createAdminUser()
     const product = await ProductFactory.with('variants', 4).create()
@@ -62,6 +65,25 @@ test.group('Variants', () => {
     responseBody.images.forEach((image: Image, key: number) => {
       assert.equal(image.name, productJson.variants[0].images[key].name)
     })
+  })
+
+  test('show all variants', async ({ client, route, assert }) => {
+    await ProductFactory.with('variants', 3, (variant) => variant.with('images', 2)).createMany(2)
+    const response = await client.get(route('/api/all_variants'))
+
+    response.assertAgainstApiSpec()
+    assert.isArray(response.body())
+    assert.lengthOf(response.body(), 6)
+    assert.properties(response.body()[0], [
+      'id',
+      'name',
+      'productId',
+      'quantity',
+      'images',
+      'productName',
+      'productPrice',
+      'productWholesalePrice',
+    ])
   })
 
   test('update variant', async ({ client, route, assert }) => {
