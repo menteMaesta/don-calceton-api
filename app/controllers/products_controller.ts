@@ -25,12 +25,19 @@ export default class ProductsController {
           },
         },
       })
-      formatProduct.variants = formatProduct.variants
-        .filter((variant: Variant) => variant.images.length > 0)
-        .map((variant: Variant) => ({
-          id: variant.images[0].id,
-          name: variant.images[0].name,
-        }))
+      formatProduct.variants = formatProduct.variants.map((variant: Variant) => {
+        if (variant.images.length > 0) {
+          return {
+            id: variant.images[0].id,
+            name: variant.images[0].name,
+          }
+        } else {
+          return {
+            id: variant.id,
+            name: null,
+          }
+        }
+      })
       return formatProduct
     })
 
