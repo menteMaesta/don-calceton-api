@@ -46,5 +46,6 @@ router
     router.resource('products', ProductsController).only(['index', 'show'])
     router.resource('products.variants', VariantsController).only(['index', 'show'])
     router.get('/all_variants', [VariantsController, 'showAll'])
+    router.post('/cart_items', [VariantsController, 'getCartItems'])
   })
   .prefix('/api')

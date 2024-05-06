@@ -4,6 +4,7 @@ import {
   storeVariantValidator,
   showVariantValidator,
   updateVariantValidator,
+  listCartVariantsValidator,
 } from '#validators/variant'
 import Product from '#models/product'
 import Variant from '#models/variant'
@@ -67,6 +68,14 @@ export default class VariantsController {
       variantJson.productWholesalePrice = currentProduct?.wholesalePrice
       return variantJson
     })
+    response.send(variantsJson)
+  }
+
+  async getCartItems({ request, response }: HttpContext) {
+    const payload = await request.validateUsing(listCartVariantsValidator)
+    const variantIds = payload.variantIds
+    const variants = await Variant.query().whereIn('id', variantIds).preload('images')
+    const variantsJson = variants.map((variant) => variant.serialize())
     response.send(variantsJson)
   }
 

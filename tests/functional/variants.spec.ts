@@ -86,6 +86,22 @@ test.group('Variants', (group) => {
     ])
   })
 
+  test('show all variants in the cart', async ({ client, route, assert }) => {
+    const products = await ProductFactory.with('variants', 3, (variant) =>
+      variant.with('images', 2)
+    ).createMany(2)
+    const variantIds = products.map((product) => `${product.variants[0].id}`)
+    const response = await client.post(route('/api/cart_items')).json({ variantIds })
+    const responseBody = response.body()
+
+    response.assertAgainstApiSpec()
+    assert.isArray(response.body())
+    assert.lengthOf(response.body(), variantIds.length)
+    responseBody.forEach((variant: Variant, key: number) => {
+      assert.equal(variant.id, variantIds[key])
+    })
+  })
+
   test('update variant', async ({ client, route, assert }) => {
     const admin = await createAdminUser()
     const product = await ProductFactory.with('variants', 1).create()

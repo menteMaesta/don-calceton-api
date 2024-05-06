@@ -37,3 +37,9 @@ export const updateVariantValidator = vine.compile(
     quantity: vine.number({ strict: true }).optional(),
   })
 )
+
+export const listCartVariantsValidator = vine.compile(
+  vine.object({
+    variantIds: vine.array(vine.string()),
+  })
+)

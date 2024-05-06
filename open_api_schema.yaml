@@ -168,6 +168,33 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VariantListItem'
+  /api/cart_items:
+    post:
+      tags:
+        - variants
+      summary: Returns all variants listed on variantIds
+      description: Returns all variants listed on variantIds with images
+      requestBody:
+        description: list of variant ids
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                variantIds:
+                  type: array
+                  items:
+                    type: string
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Variant'
   /api/products/{product_id}/variants:
     get:
       tags:
