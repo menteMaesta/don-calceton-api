@@ -13,6 +13,7 @@ const VariantsController = () => import('#controllers/variants_controller')
 const ImagesController = () => import('#controllers/images_controller')
 const UsersController = () => import('#controllers/users_controller')
 const TokenController = () => import('#controllers/token_controller')
+const CustomizationsController = () => import('#controllers/customizations_controller')
 
 router
   .group(() => {
@@ -28,6 +29,9 @@ router
 
         router.resource('variants.images', ImagesController).only(['store', 'update', 'destroy'])
         router.post('variants/:variant_id/bulk/images', [ImagesController, 'bulkStore'])
+        router
+          .resource('variants.customizations', CustomizationsController)
+          .only(['store', 'update', 'destroy'])
 
         router.resource('users', UsersController).only(['update', 'destroy'])
         router.get('/validate_credentials', [UsersController, 'validate'])

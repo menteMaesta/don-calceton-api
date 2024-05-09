@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import Image from '#models/image'
+import Customization from '#models/customization'
 
 export default class Variant extends BaseModel {
   @column({ isPrimary: true })
@@ -22,4 +23,7 @@ export default class Variant extends BaseModel {
 
   @hasMany(() => Image)
   declare images: HasMany<typeof Image>
+
+  @hasMany(() => Customization)
+  declare customizations: HasMany<typeof Customization>
 }
