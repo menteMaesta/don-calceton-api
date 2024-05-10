@@ -22,6 +22,8 @@ tags:
     description: Operation for users
   - name: login
     description: Operations for tokens
+  - name: customizations
+    description: Variant customizations
 
 paths:
   /api/products:
@@ -527,6 +529,118 @@ paths:
                   message:
                     type: string
                     example: "ENOENT: no such file or directory, unlink 'uploads/ijsyiuukbmgzdbx196rfk6ed.png'"
+  /api/variants/{variant_id}/customizations:
+    post:
+      tags:
+        - customizations
+      summary: Add new customization to variant
+      description: Add new customization to variant
+      parameters:
+        - name: variant_id
+          in: path
+          description: 'variant_id of the variant'
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: create new variant customization
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomizationReq'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customization'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Customization'
+  /api/variants/{variant_id}/customizations/{id}:
+    put:
+      tags:
+        - customizations
+      summary: Edit a customization
+      description: Edit a customization
+      parameters:
+        - name: variant_id
+          in: path
+          description: 'id of the variant'
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: 'id of the customization'
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Edit a customization for a variant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomizationReq'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customization'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CustomizationReq'
+    delete:
+      tags:
+        - customizations
+      summary: Destroy a customization
+      description: Destroy a customization
+      parameters:
+        - name: variant_id
+          in: path
+          description: 'id of the variant'
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: 'id of the customization'
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
   # /api/users:
   # post:
   #   tags:
@@ -929,3 +1043,24 @@ components:
         image:
           type: string
           format: binary
+    CustomizationReq:
+      type: object
+      properties:
+        title:
+          type: string
+        maxSize:
+          type: number
+        minSize:
+          type: number
+    Customization:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CustomizationReq'
+      properties:
+        id:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
