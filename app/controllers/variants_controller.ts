@@ -74,7 +74,10 @@ export default class VariantsController {
   async getCartItems({ request, response }: HttpContext) {
     const payload = await request.validateUsing(listCartVariantsValidator)
     const variantIds = payload.variantIds
-    const variants = await Variant.query().whereIn('id', variantIds).preload('images')
+    const variants = await Variant.query()
+      .whereIn('id', variantIds)
+      .preload('images')
+      .preload('customizations')
     const variantsJson = variants.map((variant) => variant.serialize())
     response.send(variantsJson)
   }

@@ -88,7 +88,7 @@ test.group('Variants', (group) => {
 
   test('show all variants in the cart', async ({ client, route, assert }) => {
     const products = await ProductFactory.with('variants', 3, (variant) =>
-      variant.with('images', 2)
+      variant.with('images', 2).with('customizations', 2)
     ).createMany(2)
     const variantIds = products.map((product) => `${product.variants[0].id}`)
     const response = await client.post(route('/api/cart_items')).json({ variantIds })
@@ -99,6 +99,7 @@ test.group('Variants', (group) => {
     assert.lengthOf(response.body(), variantIds.length)
     responseBody.forEach((variant: Variant, key: number) => {
       assert.equal(variant.id, variantIds[key])
+      assert.lengthOf(variant.customizations, 2)
     })
   })
 

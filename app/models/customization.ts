@@ -4,14 +4,14 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 export default class Customization extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
-  @column({ serializeAs: 'variantId' })
+  @column()
   declare variantId: number
 
   @column()
   declare title: string
-  @column({ serializeAs: 'maxSize' })
+  @column({ serialize: (value: number) => Number(value) })
   declare max_size: number
-  @column({ serializeAs: 'minSize' })
+  @column({ serialize: (value: number) => Number(value) })
   declare min_size: number
 
   @column.dateTime({ autoCreate: true })

@@ -196,7 +196,13 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Variant'
+                  allOf:
+                    - $ref: '#/components/schemas/Variant'
+                  properties:
+                    customizations:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Customization'
   /api/products/{product_id}/variants:
     get:
       tags:
