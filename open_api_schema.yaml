@@ -536,6 +536,38 @@ paths:
                     type: string
                     example: "ENOENT: no such file or directory, unlink 'uploads/ijsyiuukbmgzdbx196rfk6ed.png'"
   /api/variants/{variant_id}/customizations:
+    get:
+      tags:
+        - customizations
+      summary: Get all customizations from a variant
+      description: Get all customizations from a variant
+      parameters:
+        - name: variant_id
+          in: path
+          description: 'variant_id of the variant'
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customization'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customization'
     post:
       tags:
         - customizations

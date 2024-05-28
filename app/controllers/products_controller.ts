@@ -9,9 +9,11 @@ import {
 
 export default class ProductsController {
   async index({ response }: HttpContext) {
-    const allProducts = await Product.query().preload('variants', (query) => {
-      return query.preload('images', (subQuery) => subQuery.groupLimit(1))
-    })
+    const allProducts = await Product.query()
+      .orderBy('id', 'asc')
+      .preload('variants', (query) => {
+        return query.preload('images', (subQuery) => subQuery.orderBy('id', 'asc').groupLimit(1))
+      })
     const productsJson = allProducts.map((product) => {
       const formatProduct = product.serialize({
         relations: {

@@ -1,5 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import {
+  indexCustomizationValidator,
   storeCustomizationValidator,
   updateCustomizationValidator,
   deleteCustomizationValidator,
@@ -8,6 +9,17 @@ import Variant from '#models/variant'
 import Customization from '#models/customization'
 
 export default class CustomizationsController {
+  async index({ request, response }: HttpContext) {
+    const {
+      params: { variant_id: variantId },
+    } = await request.validateUsing(indexCustomizationValidator)
+    const variant = await Variant.findOrFail(variantId)
+    const customizations = await variant.related('customizations').query().orderBy('id', 'asc')
+    const customizationsJson = customizations.map((customization) => customization.serialize())
+
+    response.send(customizationsJson)
+  }
+
   async store({ request, response }: HttpContext) {
     const {
       params: { variant_id: variantId },

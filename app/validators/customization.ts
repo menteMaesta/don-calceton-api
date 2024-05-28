@@ -1,5 +1,13 @@
 import vine from '@vinejs/vine'
 
+export const indexCustomizationValidator = vine.compile(
+  vine.object({
+    params: vine.object({
+      variant_id: vine.string(),
+    }),
+  })
+)
+
 export const storeCustomizationValidator = vine.compile(
   vine.object({
     params: vine.object({

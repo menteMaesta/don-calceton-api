@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node bin/server.js",
     "build": "node ace build",
+    "postbuild": "rm -i build/public/uploads/* && scp -i ~/.ssh/id_github -r ~/Developer/don-calceton-api/build/*  don-calceton@64.23.166.152:/home/don-calceton/don-calceton-api-build",
     "dev": "node ace serve --watch",
     "test": "node ace test",
     "lint": "eslint .",
