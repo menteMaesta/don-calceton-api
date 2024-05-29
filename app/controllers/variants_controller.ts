@@ -1,4 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import db from '@adonisjs/lucid/services/db'
 import {
   listVariantsValidator,
   storeVariantValidator,
@@ -74,11 +75,32 @@ export default class VariantsController {
   async getCartItems({ request, response }: HttpContext) {
     const payload = await request.validateUsing(listCartVariantsValidator)
     const variantIds = payload.variantIds
-    const variants = await Variant.query()
-      .whereIn('id', variantIds)
-      .preload('images')
-      .preload('customizations')
-    const variantsJson = variants.map((variant) => variant.serialize())
+    let customizations = await db
+      .query()
+      .from('variants')
+      .whereIn('variants.id', variantIds)
+      .join('customizations', 'variants.product_id', '=', 'customizations.product_id')
+      .groupBy('customizations.id')
+      .select(
+        'customizations.id as id',
+        'customizations.product_id as productId',
+        'customizations.title as title',
+        'customizations.max_size as maxSize',
+        'customizations.min_size as minSize'
+      )
+    customizations = customizations.map((customization) => ({
+      ...customization,
+      maxSize: Number(customization.maxSize),
+      minSize: Number(customization.minSize),
+    }))
+    const variants = await Variant.query().whereIn('id', variantIds).preload('images')
+    const variantsJson = variants.map((variant) => {
+      const currentCustomization = customizations.filter(
+        (customization) => customization.productId === variant.productId
+      )
+      return { ...variant.serialize(), customizations: currentCustomization }
+    })
+
     response.send(variantsJson)
   }
 

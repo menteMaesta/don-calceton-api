@@ -5,16 +5,16 @@ import {
   updateCustomizationValidator,
   deleteCustomizationValidator,
 } from '#validators/customization'
-import Variant from '#models/variant'
+import Product from '#models/product'
 import Customization from '#models/customization'
 
 export default class CustomizationsController {
   async index({ request, response }: HttpContext) {
     const {
-      params: { variant_id: variantId },
+      params: { product_id: productId },
     } = await request.validateUsing(indexCustomizationValidator)
-    const variant = await Variant.findOrFail(variantId)
-    const customizations = await variant.related('customizations').query().orderBy('id', 'asc')
+    const product = await Product.findOrFail(productId)
+    const customizations = await product.related('customizations').query().orderBy('id', 'asc')
     const customizationsJson = customizations.map((customization) => customization.serialize())
 
     response.send(customizationsJson)
@@ -22,13 +22,13 @@ export default class CustomizationsController {
 
   async store({ request, response }: HttpContext) {
     const {
-      params: { variant_id: variantId },
+      params: { product_id: productId },
       title,
       maxSize,
       minSize,
     } = await request.validateUsing(storeCustomizationValidator)
-    const variant = await Variant.findOrFail(variantId)
-    const customization = await variant
+    const product = await Product.findOrFail(productId)
+    const customization = await product
       .related('customizations')
       .create({ title, max_size: maxSize, min_size: minSize })
     const newCustomizationJson = customization.serialize()

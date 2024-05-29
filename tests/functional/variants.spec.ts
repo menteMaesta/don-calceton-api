@@ -3,8 +3,11 @@ import { VariantFactory } from '#database/factories/variant_factory'
 import { ProductFactory } from '#database/factories/product_factory'
 import testUtils from '@adonisjs/core/services/test_utils'
 import type Variant from '#models/variant'
+import type Customization from '#models/customization'
 import type Image from '#models/image'
 import { createAdminUser } from '#tests/functional/helpers'
+
+type CartVariant = Variant & { customizations: Customization[] }
 
 test.group('Variants', (group) => {
   group.each.setup(() => testUtils.db().truncate())
@@ -88,8 +91,10 @@ test.group('Variants', (group) => {
 
   test('show all variants in the cart', async ({ client, route, assert }) => {
     const products = await ProductFactory.with('variants', 3, (variant) =>
-      variant.with('images', 2).with('customizations', 2)
-    ).createMany(2)
+      variant.with('images', 2)
+    )
+      .with('customizations', 3)
+      .createMany(2)
     const variantIds = products.map((product) => `${product.variants[0].id}`)
     const response = await client.post(route('/api/cart_items')).json({ variantIds })
     const responseBody = response.body()
@@ -97,9 +102,10 @@ test.group('Variants', (group) => {
     response.assertAgainstApiSpec()
     assert.isArray(response.body())
     assert.lengthOf(response.body(), variantIds.length)
-    responseBody.forEach((variant: Variant, key: number) => {
+
+    responseBody.forEach((variant: CartVariant, key: number) => {
       assert.equal(variant.id, variantIds[key])
-      assert.lengthOf(variant.customizations, 2)
+      assert.lengthOf(variant.customizations, 3)
     })
   })
 

@@ -5,7 +5,7 @@ export default class Customization extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()
-  declare variantId: number
+  declare productId: number
 
   @column()
   declare title: string

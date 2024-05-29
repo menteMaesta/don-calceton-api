@@ -535,7 +535,7 @@ paths:
                   message:
                     type: string
                     example: "ENOENT: no such file or directory, unlink 'uploads/ijsyiuukbmgzdbx196rfk6ed.png'"
-  /api/variants/{variant_id}/customizations:
+  /api/products/{variant_id}/customizations:
     get:
       tags:
         - customizations
@@ -603,7 +603,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Customization'
-  /api/variants/{variant_id}/customizations/{id}:
+  /api/products/{variant_id}/customizations/{id}:
     put:
       tags:
         - customizations

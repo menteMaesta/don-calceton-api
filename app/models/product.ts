@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import Variant from '#models/variant'
+import Customization from '#models/customization'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -24,4 +25,7 @@ export default class Product extends BaseModel {
 
   @hasMany(() => Variant)
   declare variants: HasMany<typeof Variant>
+
+  @hasMany(() => Customization)
+  declare customizations: HasMany<typeof Customization>
 }
