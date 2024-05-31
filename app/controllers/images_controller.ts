@@ -2,7 +2,7 @@ import app from '@adonisjs/core/services/app'
 import env from '#start/env'
 import { cuid } from '@adonisjs/core/helpers'
 import type { HttpContext } from '@adonisjs/core/http'
-import { unlinkSync } from 'fs'
+import { unlinkSync } from 'node:fs'
 import {
   storeImageValidator,
   updateImageValidator,
@@ -18,7 +18,7 @@ export default class ImagesController {
    */
   async store({ request, response }: HttpContext) {
     const {
-      params: { variant_id },
+      params: { variant_id: variantId },
       image,
     } = await request.validateUsing(storeImageValidator)
 
@@ -27,7 +27,7 @@ export default class ImagesController {
       name: imageName,
     })
 
-    const variant = await Variant.findOrFail(variant_id)
+    const variant = await Variant.findOrFail(variantId)
     const newImg = await variant.related('images').create({ name: imageName })
     const imgJson = newImg.serialize()
 
@@ -39,11 +39,11 @@ export default class ImagesController {
    */
   async bulkStore({ request, response }: HttpContext) {
     const {
-      params: { variant_id },
+      params: { variant_id: variantId },
       images,
     } = await request.validateUsing(bulkStoreImageValidator)
 
-    const variant = await Variant.findOrFail(variant_id)
+    const variant = await Variant.findOrFail(variantId)
 
     for (let image of images) {
       const imageName = `${cuid()}.${image.extname}`
@@ -53,7 +53,7 @@ export default class ImagesController {
       await variant.related('images').create({ name: imageName })
     }
 
-    response.send({ message: `uploaded images to ${variant_id}` })
+    response.send({ message: `uploaded images to ${variantId}` })
   }
 
   /**

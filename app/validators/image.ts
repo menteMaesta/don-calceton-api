@@ -6,7 +6,7 @@ export const storeImageValidator = vine.compile(
       variant_id: vine.string(),
     }),
     image: vine.file({
-      extnames: ['jpg', 'png', 'jpeg'],
+      extnames: ['jpg', 'png', 'jpeg', 'webp'],
     }),
   })
 )
@@ -18,7 +18,7 @@ export const bulkStoreImageValidator = vine.compile(
     }),
     images: vine.array(
       vine.file({
-        extnames: ['jpg', 'png', 'jpeg'],
+        extnames: ['jpg', 'png', 'jpeg', 'webp'],
       })
     ),
   })
@@ -30,7 +30,7 @@ export const updateImageValidator = vine.compile(
       id: vine.string().trim(),
     }),
     image: vine.file({
-      extnames: ['jpg', 'png', 'jpeg'],
+      extnames: ['jpg', 'png', 'jpeg', 'webp'],
     }),
   })
 )
