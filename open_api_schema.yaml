@@ -24,6 +24,8 @@ tags:
     description: Operations for tokens
   - name: customizations
     description: Variant customizations
+  - name: orders
+    description: Operations for orders
 
 paths:
   /api/products:
@@ -679,6 +681,33 @@ paths:
                 properties:
                   message:
                     type: string
+  /api/orders:
+    post:
+      tags:
+        - orders
+      summary: Creates a new order
+      description: Creates a new order
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Store a new order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderReq'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
   # /api/users:
   # post:
   #   tags:
@@ -1096,6 +1125,34 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/CustomizationReq'
+      properties:
+        id:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    OrderReq:
+      type: object
+      properties:
+        imageSize:
+          type: number
+        quantity:
+          type: number
+        status:
+          type: string
+          enum: [ACTIVE, IN_PROGRESS, DONE]
+        customizationId:
+          type: integer
+          format: int64
+        variantId:
+          type: integer
+          format: int64
+    Order:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/OrderReq'
       properties:
         id:
           type: integer

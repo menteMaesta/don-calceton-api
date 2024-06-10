@@ -14,6 +14,7 @@ const ImagesController = () => import('#controllers/images_controller')
 const UsersController = () => import('#controllers/users_controller')
 const TokenController = () => import('#controllers/token_controller')
 const CustomizationsController = () => import('#controllers/customizations_controller')
+const OrdersController = () => import('#controllers/orders_controller')
 
 router
   .group(() => {
@@ -35,6 +36,7 @@ router
 
         router.resource('users', UsersController).only(['update', 'destroy'])
         router.get('/validate_credentials', [UsersController, 'validate'])
+        router.resource('/orders', OrdersController).only(['store'])
       })
       .use(middleware.admin())
   })
