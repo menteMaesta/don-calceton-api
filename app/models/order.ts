@@ -8,9 +8,9 @@ export default class Order extends BaseModel {
   declare customizationId: number
   @column()
   declare variantId: number
-  @column()
+  @column({ serialize: (value: number) => Number(value) })
   declare imageSize: number
-  @column()
+  @column({ serialize: (value: number) => Number(value) })
   declare quantity: number
   @column()
   declare status: 'ACTIVE' | 'IN_PROGRESS' | 'DONE'

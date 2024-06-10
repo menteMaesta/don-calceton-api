@@ -1,5 +1,5 @@
 import { readdir, unlink } from 'node:fs/promises'
-import { join } from 'path'
+import { join } from 'node:path'
 import { UserFactory } from '#database/factories/user_factory'
 import env from '#start/env'
 

@@ -708,6 +708,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
+  /api/orders/all:
+    post:
+      tags:
+        - orders
+      summary: Get all orders
+      description: Get all orders
+      requestBody:
+        description: Get all orders
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [ACTIVE, IN_PROGRESS, DONE]
+        required: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
   # /api/users:
   # post:
   #   tags:

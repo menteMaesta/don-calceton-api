@@ -1,4 +1,5 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
+import { STATUS } from '#app/constants'
 
 export default class extends BaseSchema {
   protected tableName = 'orders'
@@ -13,7 +14,7 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
       table.integer('variant_id').unsigned().references('variants.id').onDelete('CASCADE')
       table.decimal('image_size')
-      table.enu('status', ['ACTIVE', 'IN_PROGRESS', 'DONE'], {
+      table.enu('status', STATUS, {
         useNative: true,
         enumName: 'status',
         existingType: false,
