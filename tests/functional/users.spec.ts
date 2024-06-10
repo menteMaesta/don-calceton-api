@@ -1,8 +1,11 @@
 import { test } from '@japa/runner'
+import testUtils from '@adonisjs/core/services/test_utils'
 import { UserFactory } from '#database/factories/user_factory'
 import { createAdminUser } from '#tests/functional/helpers'
 
-test.group('Users', () => {
+test.group('Users', (group) => {
+  group.each.setup(() => testUtils.db().truncate())
+
   test('store a user', async ({ client, route, assert }) => {
     const user = await UserFactory.makeStubbed()
     const userJson = user.serialize()

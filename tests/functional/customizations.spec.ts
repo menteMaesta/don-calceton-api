@@ -1,4 +1,5 @@
 import { test } from '@japa/runner'
+import testUtils from '@adonisjs/core/services/test_utils'
 import { ProductFactory } from '#database/factories/product_factory'
 import { CustomizationFactory } from '#database/factories/customization_factory'
 import { createAdminUser } from '#tests/functional/helpers'
@@ -8,7 +9,8 @@ type SerializedCustomization = Omit<Customization, 'max_size' | 'min_size'> & {
   maxSize: number
   minSize: number
 }
-test.group('Customizations', () => {
+test.group('Customizations', (group) => {
+  group.each.setup(() => testUtils.db().truncate())
   test('list customizations', async ({ client, route, assert }) => {
     const admin = await createAdminUser()
     const product = await ProductFactory.with('customizations', 3).create()

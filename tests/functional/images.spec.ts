@@ -1,4 +1,5 @@
 import { test } from '@japa/runner'
+import testUtils from '@adonisjs/core/services/test_utils'
 import { VariantFactory } from '#database/factories/variant_factory'
 import { resolve, join } from 'node:path'
 import { createAdminUser, removeImages } from '#tests/functional/helpers'
@@ -7,6 +8,8 @@ test.group('Images', (group) => {
   group.teardown(async () => {
     await removeImages()
   })
+  group.each.setup(() => testUtils.db().truncate())
+
   test('store an image', async ({ client, route, assert }) => {
     const admin = await createAdminUser()
     const dirname = resolve()
