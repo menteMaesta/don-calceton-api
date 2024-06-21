@@ -48,7 +48,9 @@ export default class VariantsController {
     const productsJson = allProducts.map((product) =>
       product.serialize({ fields: ['id', 'name', 'price', 'wholesalePrice'] })
     )
-    const allVariants = await Variant.query().preload('images')
+    const allVariants = await Variant.query().preload('images', (subQuery) =>
+      subQuery.orderBy('created_at', 'asc')
+    )
     const variantsJson = allVariants.map((variant) => {
       const currentProduct = productsJson.find((product) => product.id === variant.productId)
       let variantJson = variant.serialize({
