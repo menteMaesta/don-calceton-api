@@ -714,8 +714,15 @@ paths:
         - orders
       summary: Get all orders
       description: Get all orders
+      parameters:
+        - name: Authorization
+          in: header
+          description: 'bearer token'
+          schema:
+            type: string
+          required: true
       requestBody:
-        description: Get all orders
+        description: Get all orders, if status is specified, get all orders with that status
         content:
           application/json:
             schema:
