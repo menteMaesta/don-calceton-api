@@ -73,4 +73,24 @@ test.group('Orders', (group) => {
     response.assertBodyContains({ customizationId: newOrderJson.customizationId })
     response.assertBodyContains({ variantId: newOrderJson.variantId })
   })
+
+  test('bulk store orders', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
+    const product = await ProductFactory.with('variants', 1).with('customizations', 1).create()
+    const productJson = product.serialize()
+    const newOrders = await OrderFactory.merge({
+      customizationId: productJson.customizations[0].id,
+      variantId: productJson.variants[0].id,
+    }).makeStubbedMany(3)
+    const newOrdersJson = newOrders.map((order) => ({ ...order.serialize(), images: [] }))
+
+    const response = await client
+      .post(route('/api/orders/bulk'))
+      .json({ orders: newOrdersJson })
+      .loginAs(admin)
+    const responseAllOrders = await client.post(route('/api/orders/all')).loginAs(admin)
+
+    response.assertAgainstApiSpec()
+    assert.equal(responseAllOrders.body().length, newOrdersJson.length)
+  })
 })
