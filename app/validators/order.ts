@@ -21,3 +21,17 @@ export const storeOrderValidator = vine.compile(
     ),
   })
 )
+
+export const bulkStoreOrderValidator = vine.compile(
+  vine.object({
+    orders: vine.array(
+      vine.object({
+        customizationId: vine.number({ strict: true }),
+        variantId: vine.number({ strict: true }),
+        imageSize: vine.number({ strict: true }),
+        quantity: vine.number({ strict: true }),
+        status: vine.enum(STATUS),
+      })
+    ),
+  })
+)
