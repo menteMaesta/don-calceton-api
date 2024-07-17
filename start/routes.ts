@@ -36,7 +36,8 @@ router
 
         router.resource('users', UsersController).only(['update', 'destroy'])
         router.get('/validate_credentials', [UsersController, 'validate'])
-        router.resource('/orders', OrdersController).only(['store'])
+        router.post('/orders', [OrdersController, 'store'])
+        router.post('/orders/all', [OrdersController, 'index'])
       })
       .use(middleware.admin())
   })
@@ -53,6 +54,5 @@ router
     router.resource('products.variants', VariantsController).only(['index', 'show'])
     router.get('/all_variants', [VariantsController, 'showAll'])
     router.post('/cart_items', [VariantsController, 'getCartItems'])
-    router.post('/orders/all', [OrdersController, 'index'])
   })
   .prefix('/api')

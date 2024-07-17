@@ -8,6 +8,7 @@ test.group('Orders', (group) => {
   group.each.setup(() => testUtils.db().truncate())
 
   test('get all orders', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const product = await ProductFactory.with('variants', 1).with('customizations', 1).create()
     const productJson = product.serialize()
     const orders = await OrderFactory.merge({
@@ -16,13 +17,14 @@ test.group('Orders', (group) => {
     }).createMany(3)
     const ordersJson = orders.map((order) => order.serialize())
 
-    const response = await client.post(route('/api/orders/all'))
+    const response = await client.post(route('/api/orders/all')).loginAs(admin)
 
     response.assertAgainstApiSpec()
     assert.equal(response.body().length, ordersJson.length)
   })
 
   test('get orders with specific status', async ({ client, route, assert }) => {
+    const admin = await createAdminUser()
     const product = await ProductFactory.with('variants', 1).with('customizations', 1).create()
     const productJson = product.serialize()
     const ordersDone = await OrderFactory.apply('done')
@@ -40,7 +42,10 @@ test.group('Orders', (group) => {
       .createMany(9)
     const ordersDoneJson = ordersDone.map((order) => order.serialize())
 
-    const response = await client.post(route('/api/orders/all')).json({ status: 'DONE' })
+    const response = await client
+      .post(route('/api/orders/all'))
+      .json({ status: 'DONE' })
+      .loginAs(admin)
 
     response.assertAgainstApiSpec()
     assert.equal(response.body().length, ordersDoneJson.length)
@@ -57,7 +62,7 @@ test.group('Orders', (group) => {
     const newOrderJson = newOrder.serialize()
 
     const response = await client
-      .post(route('orders.store'))
+      .post(route('/api/orders'))
       .json({ ...newOrderJson, images: [] })
       .loginAs(admin)
 
