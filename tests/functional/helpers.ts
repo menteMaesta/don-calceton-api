@@ -1,5 +1,5 @@
 import { readdir, unlink } from 'node:fs/promises'
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import { UserFactory } from '#database/factories/user_factory'
 import env from '#start/env'
 
@@ -17,4 +17,11 @@ export const removeImages = async () => {
   } catch (error) {
     throw error
   }
+}
+
+export const getImagePath = () => {
+  const dirname = resolve()
+  const filePath = join(dirname, '/tests/pic.png')
+
+  return filePath
 }
