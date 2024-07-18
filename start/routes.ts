@@ -38,7 +38,6 @@ router
         router.get('/validate_credentials', [UsersController, 'validate'])
         router.post('/orders', [OrdersController, 'store'])
         router.post('/orders/all', [OrdersController, 'index'])
-        router.post('/orders/bulk', [OrdersController, 'bulkStore'])
       })
       .use(middleware.admin())
   })

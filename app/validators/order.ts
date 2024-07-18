@@ -9,29 +9,10 @@ export const indexOrdersValidator = vine.compile(
 
 export const storeOrderValidator = vine.compile(
   vine.object({
-    customizationId: vine.number({ strict: true }),
-    variantId: vine.number({ strict: true }),
-    imageSize: vine.number({ strict: true }),
-    quantity: vine.number({ strict: true }),
+    customizationId: vine.number(),
+    variantId: vine.number(),
+    imageSize: vine.number(),
+    quantity: vine.number(),
     status: vine.enum(STATUS),
-    images: vine.array(
-      vine.file({
-        extnames: ['jpg', 'png', 'jpeg', 'webp'],
-      })
-    ),
-  })
-)
-
-export const bulkStoreOrderValidator = vine.compile(
-  vine.object({
-    orders: vine.array(
-      vine.object({
-        customizationId: vine.number({ strict: true }),
-        variantId: vine.number({ strict: true }),
-        imageSize: vine.number({ strict: true }),
-        quantity: vine.number({ strict: true }),
-        status: vine.enum(STATUS),
-      })
-    ),
   })
 )
