@@ -15,6 +15,7 @@ const UsersController = () => import('#controllers/users_controller')
 const TokenController = () => import('#controllers/token_controller')
 const CustomizationsController = () => import('#controllers/customizations_controller')
 const OrdersController = () => import('#controllers/orders_controller')
+const OrderImagesController = () => import('#controllers/order_images_controller')
 
 router
   .group(() => {
@@ -38,7 +39,7 @@ router
         router.get('/validate_credentials', [UsersController, 'validate'])
         router.post('/orders', [OrdersController, 'store'])
         router.post('/orders/all', [OrdersController, 'index'])
-        router.post('/orders/bulk', [OrdersController, 'bulkStore'])
+        router.post('/orders/:order_id/images', [OrderImagesController, 'store'])
       })
       .use(middleware.admin())
   })
