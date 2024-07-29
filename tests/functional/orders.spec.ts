@@ -27,14 +27,14 @@ test.group('Orders', (group) => {
     const admin = await createAdminUser()
     const product = await ProductFactory.with('variants', 1).with('customizations', 1).create()
     const productJson = product.serialize()
-    const ordersDone = await OrderFactory.apply('done')
+    const ordersDone = await OrderFactory.apply('delivered')
       .merge({
         customizationId: productJson.customizations[0].id,
         variantId: productJson.variants[0].id,
       })
       .createMany(3)
 
-    await OrderFactory.apply('active')
+    await OrderFactory.apply('inProcess')
       .merge({
         customizationId: productJson.customizations[0].id,
         variantId: productJson.variants[0].id,

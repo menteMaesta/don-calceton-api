@@ -1,1 +1,1 @@
-export const STATUS = ['ACTIVE', 'IN_PROGRESS', 'DONE'] as const
+export const STATUS = ['IN_PROCESS', 'DELIVERED', 'CANCELED'] as const

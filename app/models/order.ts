@@ -13,7 +13,7 @@ export default class Order extends BaseModel {
   @column({ serialize: (value: number) => Number(value) })
   declare quantity: number
   @column()
-  declare status: 'ACTIVE' | 'IN_PROGRESS' | 'DONE'
+  declare status: 'IN_PROCESS' | 'DELIVERED' | 'CANCELED'
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

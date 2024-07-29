@@ -730,7 +730,7 @@ paths:
               properties:
                 status:
                   type: string
-                  enum: [ACTIVE, IN_PROGRESS, DONE]
+                  enum: ['IN_PROCESS', 'DELIVERED', 'CANCELED']
         required: false
       responses:
         '200':
@@ -1217,7 +1217,7 @@ components:
           type: number
         status:
           type: string
-          enum: [ACTIVE, IN_PROGRESS, DONE]
+          enum: ['IN_PROCESS', 'DELIVERED', 'CANCELED']
         customizationId:
           type: integer
           format: int64
