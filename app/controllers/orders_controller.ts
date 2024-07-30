@@ -8,9 +8,27 @@ export default class OrdersController {
   async index({ request, response }: HttpContext) {
     const { status = '' } = await request.validateUsing(indexOrdersValidator)
     const allOrders = status
-      ? await Order.query().where('status', status.toLocaleUpperCase())
-      : await Order.all()
-    const ordersJson = allOrders.map((order) => order.serialize())
+      ? await Order.query()
+          .where('status', status.toLocaleUpperCase())
+          .preload('images')
+          .preload('customization')
+          .preload('variant')
+          .orderBy('created_at', 'asc')
+      : await Order.query()
+          .preload('images')
+          .preload('customization')
+          .preload('variant', (subQuery) => subQuery.preload('images'))
+          .orderBy('created_at', 'asc')
+    const ordersJson = allOrders.map((order) =>
+      order.serialize({
+        relations: {
+          customization: {
+            fields: { pick: ['title'] },
+          },
+          variant: { fields: { pick: ['name', 'images'] } },
+        },
+      })
+    )
     response.send(ordersJson)
   }
 

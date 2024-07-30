@@ -10,7 +10,7 @@ export const OrderFactory = factory
       status: faker.helpers.arrayElement(STATUS) as Order['status'],
     }
   })
-  .state('active', (order) => (order.status = 'ACTIVE'))
-  .state('inProgress', (order) => (order.status = 'IN_PROGRESS'))
-  .state('done', (order) => (order.status = 'DONE'))
+  .state('inProcess', (order) => (order.status = 'IN_PROCESS'))
+  .state('delivered', (order) => (order.status = 'DELIVERED'))
+  .state('canceled', (order) => (order.status = 'CANCELED'))
   .build()
