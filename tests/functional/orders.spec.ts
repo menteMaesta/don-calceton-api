@@ -27,7 +27,7 @@ test.group('Orders', (group) => {
     const admin = await createAdminUser()
     const product = await ProductFactory.with('variants', 1).with('customizations', 1).create()
     const productJson = product.serialize()
-    const ordersDone = await OrderFactory.apply('delivered')
+    const ordersDelivered = await OrderFactory.apply('delivered')
       .merge({
         customizationId: productJson.customizations[0].id,
         variantId: productJson.variants[0].id,
@@ -40,15 +40,15 @@ test.group('Orders', (group) => {
         variantId: productJson.variants[0].id,
       })
       .createMany(9)
-    const ordersDoneJson = ordersDone.map((order) => order.serialize())
+    const ordersDeliveredJson = ordersDelivered.map((order) => order.serialize())
 
     const response = await client
       .post(route('/api/orders/all'))
-      .json({ status: 'DONE' })
+      .json({ status: 'DELIVERED' })
       .loginAs(admin)
 
     response.assertAgainstApiSpec()
-    assert.equal(response.body().length, ordersDoneJson.length)
+    assert.equal(response.body().length, ordersDeliveredJson.length)
   })
 
   test('store an order', async ({ client, route }) => {

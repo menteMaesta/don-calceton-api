@@ -1232,6 +1232,30 @@ components:
         id:
           type: integer
           format: int64
+        Customization:
+          type: object
+          properties:
+            title:
+              type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderImage'
+        Variant:
+          type: object
+          properties:
+            name:
+              type: string
+            images:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  name:
+                    type: string
         createdAt:
           type: string
         updatedAt:
