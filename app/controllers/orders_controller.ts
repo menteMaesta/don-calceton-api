@@ -1,5 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { indexOrdersValidator, storeOrderValidator } from '#validators/order'
+import {
+  indexOrdersValidator,
+  storeOrderValidator,
+  verifyQuantityValidator,
+} from '#validators/order'
 import Order from '#models/order'
 import Customization from '#models/customization'
 import Variant from '#models/variant'
@@ -35,16 +39,35 @@ export default class OrdersController {
   async store({ request, response }: HttpContext) {
     const { customizationId, variantId, imageSize, quantity, status } =
       await request.validateUsing(storeOrderValidator)
+
+    const variant = await Variant.findOrFail(variantId)
     await Customization.findOrFail(customizationId)
-    await Variant.findOrFail(variantId)
-    const order = await Order.create({
-      customizationId,
-      variantId,
-      imageSize,
-      quantity,
-      status,
-    })
-    const orderJson = order.serialize()
-    response.send(orderJson)
+    variant.quantity = variant.quantity - quantity
+
+    if (variant.quantity >= 0) {
+      const order = await Order.create({
+        customizationId,
+        variantId,
+        imageSize,
+        quantity,
+        status,
+      })
+      variant.save() // Save the variant with the new quantity
+      const orderJson = order.serialize()
+      response.send(orderJson)
+    } else {
+      response.status(400).send({ message: 'Not enough quantity' })
+    }
+  }
+
+  async verifyQuantity({ request, response }: HttpContext) {
+    const { orders } = await request.validateUsing(verifyQuantityValidator)
+    for (const order of orders) {
+      const variant = await Variant.findOrFail(order.variantId)
+      if (variant.quantity < order.quantity) {
+        response.status(400).send({ message: 'Not enough quantity' })
+        return
+      }
+    }
   }
 }

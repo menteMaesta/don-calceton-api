@@ -687,13 +687,6 @@ paths:
         - orders
       summary: Creates a new order
       description: Creates a new order
-      parameters:
-        - name: Authorization
-          in: header
-          description: 'bearer token'
-          schema:
-            type: string
-          required: true
       requestBody:
         description: Store a new order
         content:
@@ -708,6 +701,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Not enough quantity'
   /api/orders/all:
     post:
       tags:
@@ -750,8 +753,8 @@ paths:
     post:
       tags:
         - orders
-      summary: Get all orders
-      description: Get all orders
+      summary: Store images from an order
+      description: Store images from an order
       parameters:
         - name: order_id
           in: path
@@ -760,12 +763,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: Authorization
-          in: header
-          description: 'bearer token'
-          schema:
-            type: string
-          required: true
       requestBody:
         description: Add an image to the order
         content:
@@ -783,6 +780,44 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/OrderImage'
+  /api/orders/verify_quantity:
+    post:
+      tags:
+        - orders
+      summary: verify stock
+      description: verify stock for an order
+      requestBody:
+        description: array of variantId and total quantity for each order
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  variantId:
+                    type: integer
+                    format: int64
+                  quantity:
+                    type: integer
+                    format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Not enough quantity'
   # /api/users:
   # post:
   #   tags:

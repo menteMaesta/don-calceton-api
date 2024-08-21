@@ -9,5 +9,6 @@ export const VariantFactory = factory
       quantity: faker.number.int({ max: 10 }),
     }
   })
+  .state('stock10', (variant) => (variant.quantity = 10))
   .relation('images', () => ImageFactory)
   .build()

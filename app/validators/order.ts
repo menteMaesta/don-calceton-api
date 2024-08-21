@@ -16,3 +16,9 @@ export const storeOrderValidator = vine.compile(
     status: vine.enum(STATUS),
   })
 )
+
+export const verifyQuantityValidator = vine.compile(
+  vine.object({
+    orders: vine.array(vine.object({ variantId: vine.number(), quantity: vine.number() })),
+  })
+)
