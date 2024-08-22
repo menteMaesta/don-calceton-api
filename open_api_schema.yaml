@@ -1259,6 +1259,16 @@ components:
         variantId:
           type: integer
           format: int64
+        invoiceId:
+          type: string
+        customId:
+          type: string
+      required:
+        - imageSize
+        - quantity
+        - status
+        - customizationId
+        - variantId
     Order:
       type: object
       allOf:

@@ -8,6 +8,8 @@ export const OrderFactory = factory
       imageSize: faker.number.float({ max: 200, fractionDigits: 2 }),
       quantity: faker.number.int(100),
       status: faker.helpers.arrayElement(STATUS) as Order['status'],
+      invoiceId: faker.string.uuid(),
+      customId: faker.string.uuid(),
     }
   })
   .state('inProcess', (order) => (order.status = 'IN_PROCESS'))

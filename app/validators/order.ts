@@ -14,6 +14,8 @@ export const storeOrderValidator = vine.compile(
     imageSize: vine.number(),
     quantity: vine.number(),
     status: vine.enum(STATUS),
+    invoiceId: vine.string().optional(),
+    customId: vine.string().optional(),
   })
 )
 

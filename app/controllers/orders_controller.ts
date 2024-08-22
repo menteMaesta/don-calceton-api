@@ -37,7 +37,7 @@ export default class OrdersController {
   }
 
   async store({ request, response }: HttpContext) {
-    const { customizationId, variantId, imageSize, quantity, status } =
+    const { customizationId, variantId, imageSize, quantity, status, invoiceId, customId } =
       await request.validateUsing(storeOrderValidator)
 
     const variant = await Variant.findOrFail(variantId)
@@ -51,6 +51,8 @@ export default class OrdersController {
         imageSize,
         quantity,
         status,
+        invoiceId,
+        customId,
       })
       variant.save() // Save the variant with the new quantity
       const orderJson = order.serialize()

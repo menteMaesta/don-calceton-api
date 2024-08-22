@@ -18,6 +18,10 @@ export default class Order extends BaseModel {
   declare quantity: number
   @column()
   declare status: 'IN_PROCESS' | 'DELIVERED' | 'CANCELED'
+  @column()
+  declare invoiceId: string
+  @column()
+  declare customId: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
